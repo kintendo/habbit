@@ -1,0 +1,11 @@
+@import "sass/mixins";
+
+// fade in
+.animate-appear {
+  opacity: 0.01;
+}
+
+.animate-appear.animate-appear-active {
+  opacity: 1;
+  @include transition(opacity 2s ease-in);
+}
