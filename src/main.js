@@ -1,10 +1,14 @@
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var App = require('./app.js');
-var elm = document.getElementById('app');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const {Provider} = require('react-redux');
+const AppStore = require('./stores/AppStore');
+const App = require('./app.js');
+const elm = document.getElementById('app');
 
 if (elm) {
-  ReactDOM.render(React.createElement(App), elm);
+    ReactDOM.render(
+        <Provider store={AppStore}><App /></Provider>
+    , elm);
 }
