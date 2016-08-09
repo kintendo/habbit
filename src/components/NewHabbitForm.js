@@ -1,10 +1,13 @@
 'use strict';
 
 const React = require('react');
+const {Component} = React;
+const {connect} = require('react-redux');
 const moment = require('moment');
+const actions = require('../actions/actions');
 const habbitService = require('../resources/habbitService');
 
-class NewHabbitForm extends React.Component {
+class NewHabbitForm extends Component {
 
     constructor (props) {
         super(props);
@@ -18,7 +21,11 @@ class NewHabbitForm extends React.Component {
             description: this.descriptionInput.value,
             last_completed: moment().format()
         };
-        habbitService.createNewHabbit(newHabbit);
+        habbitService.createNewHabbit(newHabbit, (err) => {
+            if (!err) {
+                this.props.changeView('list');
+            }
+        });
     }
 
     render (){
@@ -40,8 +47,11 @@ class NewHabbitForm extends React.Component {
     }
 }
 
+function mapStateToProps(state) {
+    return state;
+}
 NewHabbitForm.propTypes = {
 };
 NewHabbitForm.defaultProps = {
 };
-module.exports = NewHabbitForm;
+module.exports = connect(mapStateToProps, actions)(NewHabbitForm);

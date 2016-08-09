@@ -1,21 +1,9 @@
 'use strict';
 
-// Libraries
 const React = require('react');
 const {Component, PropTypes} = React;
 const moment = require('moment');
 
-// Config
-const propTypes = {
-    name: PropTypes.string,
-    last_completed: PropTypes.string
-};
-const defaultProps = {
-    name: '',
-    onViewHabbit: () => {}
-};
-
-// Definition
 class HabbitListItem extends Component {
 
     render (){
@@ -33,6 +21,12 @@ class HabbitListItem extends Component {
     }
 }
 
-HabbitListItem.propTypes = propTypes;
-HabbitListItem.defaultProps = defaultProps;
+HabbitListItem.propTypes = {
+    name: PropTypes.string,
+    last_completed: PropTypes.string
+};
+HabbitListItem.defaultProps = {
+    name: '',
+    onViewHabbit: () => {}
+};
 module.exports = HabbitListItem;

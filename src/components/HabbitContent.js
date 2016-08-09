@@ -1,11 +1,9 @@
 'use strict';
 
 const React = require('react');
-
 const HabbitList = require('./HabbitList');
 const NewHabbitForm = require('./NewHabbitForm');
 const Login = require('./Login');
-
 
 class HabbitContent extends React.Component {
 

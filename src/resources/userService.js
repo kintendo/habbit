@@ -1,14 +1,10 @@
 'use strict';
 
-const {db, auth} = require('./firebaseService');
+const {db} = require('./firebaseService');
 let userRef = undefined;
 
 function initUser(uid) {
     return userRef = db.ref(`users/${uid}`);
-}
-
-function getSessionUser() {
-    return auth.currentUser;
 }
 
 function setUserInfo(info) {
@@ -19,4 +15,4 @@ function setUserInfo(info) {
     });
 }
 
-module.exports = {initUser, getSessionUser, setUserInfo};
+module.exports = {initUser, setUserInfo};

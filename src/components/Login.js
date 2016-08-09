@@ -2,31 +2,11 @@
 
 const React = require('react');
 const {connect} = require('react-redux');
-
-// Services
 const {facebookLogin} = require('../resources/authService');
+const actions = require('../actions/actions');
 const userService = require('../resources/userService');
 const habbitService = require('../resources/habbitService');
 const catService = require('../resources/categoryService');
-
-// Config
-function mapStateToProps(state) {
-    const {userData} = state;
-    return {
-        uid: userData.uid
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        setUserId: (uid) => {
-            dispatch({type: 'SET_USER_ID', uid});
-        },
-        changeView: (view) => {
-            dispatch({type: 'CHANGE_VIEW', view});
-        }
-    }
-}
 
 class Login extends React.Component {
 
@@ -47,15 +27,9 @@ class Login extends React.Component {
     }
 
     handleFacebookLogin() {
-        const facebookLoginPromise = facebookLogin();
-        facebookLoginPromise.then( ({credential, user}) => {
-            // TODO: use token to access & store friends list
-            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-            // var token = credential.accessToken;
+        facebookLogin( (user) => {
             this.initializeUser(user.uid);
-
-            const fbUser = user.providerData[0];
-            userService.setUserInfo({facebook_id: fbUser.uid, email: fbUser.email, photo: fbUser.photoURL});
+            userService.setUserInfo(user);
             this.props.changeView('list');
         });
     }
@@ -69,4 +43,10 @@ class Login extends React.Component {
     }
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(Login);
+function mapStateToProps(state) {
+    const {userData} = state;
+    return {
+        uid: userData.uid
+    };
+}
+module.exports = connect(mapStateToProps, actions)(Login);

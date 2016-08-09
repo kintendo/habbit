@@ -10,7 +10,7 @@ function initCats(uid) {
 function createNewCat(catName) {
     catRef.child(catName).once('value').then ( (snapshot) => {
         if (!snapshot.exists()) {
-            catRef.set({[catName]: true});
+            catRef.update({[catName]: true});
         }
     });
 }

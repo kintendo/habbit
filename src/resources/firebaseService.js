@@ -11,10 +11,6 @@ firebase.initializeApp({
     storageBucket: ""
 });
 
-const facebookProvider = new firebase.auth.FacebookAuthProvider();
-facebookProvider.addScope('user_friends');
-
 const db = firebase.database();
-const auth = firebase.auth();
 
-module.exports = {firebase, db, auth, facebookProvider};
+module.exports = {firebase, db};

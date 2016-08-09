@@ -25364,6 +25364,27 @@ module.exports = function symbolObservablePonyfill(root) {
 },{}],190:[function(require,module,exports){
 'use strict';
 
+function changeView(view) {
+    return { type: 'CHANGE_VIEW', view: view };
+}
+
+function setHabbits(habbits) {
+    return { type: 'SET_HABBITS', habbits: habbits };
+}
+
+function setUserId(uid) {
+    return { type: 'SET_USER_ID', uid: uid };
+}
+
+module.exports = {
+    changeView: changeView,
+    setHabbits: setHabbits,
+    setUserId: setUserId
+};
+
+},{}],191:[function(require,module,exports){
+'use strict';
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25475,7 +25496,7 @@ var App = function (_React$Component) {
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(App);
 
-},{"./components/HabbitContent":191,"./resources/authService":197,"./resources/categoryService":198,"./resources/habbitService":200,"./resources/userService":201,"react":179,"react-redux":46}],191:[function(require,module,exports){
+},{"./components/HabbitContent":192,"./resources/authService":198,"./resources/categoryService":199,"./resources/habbitService":201,"./resources/userService":202,"react":179,"react-redux":46}],192:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25487,7 +25508,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
-
 var HabbitList = require('./HabbitList');
 var NewHabbitForm = require('./NewHabbitForm');
 var Login = require('./Login');
@@ -25528,7 +25548,7 @@ HabbitContent.defaultProps = {
 };
 module.exports = HabbitContent;
 
-},{"./HabbitList":192,"./Login":194,"./NewHabbitForm":195,"react":179}],192:[function(require,module,exports){
+},{"./HabbitList":193,"./Login":195,"./NewHabbitForm":196,"react":179}],193:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25545,27 +25565,9 @@ var _require = require('react-redux');
 
 var connect = _require.connect;
 
-var assign = require('object-assign');
 var HabbitListItem = require('./HabbitListItem');
-
-// Services
+var actions = require('../actions/actions');
 var habbitService = require('../resources/habbitService');
-
-function mapStateToProps(state) {
-    var habbitData = state.habbitData;
-
-    return {
-        habbits: habbitData.habbits
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        setHabbits: function setHabbits(habbits) {
-            dispatch({ type: 'SET_HABBITS', habbits: habbits });
-        }
-    };
-}
 
 var HabbitList = function (_React$Component) {
     _inherits(HabbitList, _React$Component);
@@ -25581,17 +25583,9 @@ var HabbitList = function (_React$Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            var hp = habbitService.getHabbits();
-            if (hp) {
-                hp.then(function (snapshot) {
-                    var habbitsObj = snapshot.val();
-                    var keys = Object.keys(habbitsObj);
-                    var habbits = keys.map(function (key) {
-                        return assign({}, habbitsObj[key], { key: key });
-                    });
-                    _this2.props.setHabbits(habbits);
-                });
-            }
+            habbitService.getHabbits(function (habbits) {
+                _this2.props.setHabbits(habbits);
+            });
         }
     }, {
         key: 'render',
@@ -25612,18 +25606,24 @@ var HabbitList = function (_React$Component) {
     return HabbitList;
 }(React.Component);
 
+function mapStateToProps(state) {
+    var habbitData = state.habbitData;
+
+    return {
+        habbits: habbitData.habbits
+    };
+}
+
 HabbitList.propTypes = {
     habbits: React.PropTypes.array
 };
 HabbitList.defaultProps = {
     habbits: []
 };
-module.exports = connect(mapStateToProps, mapDispatchToProps)(HabbitList);
+module.exports = connect(mapStateToProps, actions)(HabbitList);
 
-},{"../resources/habbitService":200,"./HabbitListItem":193,"object-assign":41,"react":179,"react-redux":46}],193:[function(require,module,exports){
+},{"../actions/actions":190,"../resources/habbitService":201,"./HabbitListItem":194,"react":179,"react-redux":46}],194:[function(require,module,exports){
 'use strict';
-
-// Libraries
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -25638,18 +25638,6 @@ var Component = React.Component;
 var PropTypes = React.PropTypes;
 
 var moment = require('moment');
-
-// Config
-var propTypes = {
-    name: PropTypes.string,
-    last_completed: PropTypes.string
-};
-var defaultProps = {
-    name: '',
-    onViewHabbit: function onViewHabbit() {}
-};
-
-// Definition
 
 var HabbitListItem = function (_Component) {
     _inherits(HabbitListItem, _Component);
@@ -25695,11 +25683,17 @@ var HabbitListItem = function (_Component) {
     return HabbitListItem;
 }(Component);
 
-HabbitListItem.propTypes = propTypes;
-HabbitListItem.defaultProps = defaultProps;
+HabbitListItem.propTypes = {
+    name: PropTypes.string,
+    last_completed: PropTypes.string
+};
+HabbitListItem.defaultProps = {
+    name: '',
+    onViewHabbit: function onViewHabbit() {}
+};
 module.exports = HabbitListItem;
 
-},{"moment":40,"react":179}],194:[function(require,module,exports){
+},{"moment":40,"react":179}],195:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25716,35 +25710,14 @@ var _require = require('react-redux');
 
 var connect = _require.connect;
 
-// Services
-
 var _require2 = require('../resources/authService');
 
 var facebookLogin = _require2.facebookLogin;
 
+var actions = require('../actions/actions');
 var userService = require('../resources/userService');
 var habbitService = require('../resources/habbitService');
 var catService = require('../resources/categoryService');
-
-// Config
-function mapStateToProps(state) {
-    var userData = state.userData;
-
-    return {
-        uid: userData.uid
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        setUserId: function setUserId(uid) {
-            dispatch({ type: 'SET_USER_ID', uid: uid });
-        },
-        changeView: function changeView(view) {
-            dispatch({ type: 'CHANGE_VIEW', view: view });
-        }
-    };
-}
 
 var Login = function (_React$Component) {
     _inherits(Login, _React$Component);
@@ -25775,18 +25748,9 @@ var Login = function (_React$Component) {
         value: function handleFacebookLogin() {
             var _this2 = this;
 
-            var facebookLoginPromise = facebookLogin();
-            facebookLoginPromise.then(function (_ref) {
-                var credential = _ref.credential;
-                var user = _ref.user;
-
-                // TODO: use token to access & store friends list
-                // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-                // var token = credential.accessToken;
+            facebookLogin(function (user) {
                 _this2.initializeUser(user.uid);
-
-                var fbUser = user.providerData[0];
-                userService.setUserInfo({ facebook_id: fbUser.uid, email: fbUser.email, photo: fbUser.photoURL });
+                userService.setUserInfo(user);
                 _this2.props.changeView('list');
             });
         }
@@ -25808,9 +25772,16 @@ var Login = function (_React$Component) {
     return Login;
 }(React.Component);
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(Login);
+function mapStateToProps(state) {
+    var userData = state.userData;
 
-},{"../resources/authService":197,"../resources/categoryService":198,"../resources/habbitService":200,"../resources/userService":201,"react":179,"react-redux":46}],195:[function(require,module,exports){
+    return {
+        uid: userData.uid
+    };
+}
+module.exports = connect(mapStateToProps, actions)(Login);
+
+},{"../actions/actions":190,"../resources/authService":198,"../resources/categoryService":199,"../resources/habbitService":201,"../resources/userService":202,"react":179,"react-redux":46}],196:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25822,11 +25793,18 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
+var Component = React.Component;
+
+var _require = require('react-redux');
+
+var connect = _require.connect;
+
 var moment = require('moment');
+var actions = require('../actions/actions');
 var habbitService = require('../resources/habbitService');
 
-var NewHabbitForm = function (_React$Component) {
-    _inherits(NewHabbitForm, _React$Component);
+var NewHabbitForm = function (_Component) {
+    _inherits(NewHabbitForm, _Component);
 
     function NewHabbitForm(props) {
         _classCallCheck(this, NewHabbitForm);
@@ -25840,18 +25818,24 @@ var NewHabbitForm = function (_React$Component) {
     _createClass(NewHabbitForm, [{
         key: 'createNewHabbit',
         value: function createNewHabbit() {
+            var _this2 = this;
+
             var newHabbit = {
                 name: this.nameInput.value,
                 category: this.categoryInput.value,
                 description: this.descriptionInput.value,
                 last_completed: moment().format()
             };
-            habbitService.createNewHabbit(newHabbit);
+            habbitService.createNewHabbit(newHabbit, function (err) {
+                if (!err) {
+                    _this2.props.changeView('list');
+                }
+            });
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
             return React.createElement(
                 'div',
@@ -25865,7 +25849,7 @@ var NewHabbitForm = function (_React$Component) {
                         'Name'
                     ),
                     React.createElement('input', { ref: function ref(c) {
-                            return _this2.nameInput = c;
+                            return _this3.nameInput = c;
                         } })
                 ),
                 React.createElement(
@@ -25877,7 +25861,7 @@ var NewHabbitForm = function (_React$Component) {
                         'Category'
                     ),
                     React.createElement('input', { ref: function ref(c) {
-                            return _this2.categoryInput = c;
+                            return _this3.categoryInput = c;
                         } })
                 ),
                 React.createElement(
@@ -25889,7 +25873,7 @@ var NewHabbitForm = function (_React$Component) {
                         'Description'
                     ),
                     React.createElement('textarea', { ref: function ref(c) {
-                            return _this2.descriptionInput = c;
+                            return _this3.descriptionInput = c;
                         } })
                 ),
                 React.createElement(
@@ -25902,13 +25886,16 @@ var NewHabbitForm = function (_React$Component) {
     }]);
 
     return NewHabbitForm;
-}(React.Component);
+}(Component);
 
+function mapStateToProps(state) {
+    return state;
+}
 NewHabbitForm.propTypes = {};
 NewHabbitForm.defaultProps = {};
-module.exports = NewHabbitForm;
+module.exports = connect(mapStateToProps, actions)(NewHabbitForm);
 
-},{"../resources/habbitService":200,"moment":40,"react":179}],196:[function(require,module,exports){
+},{"../actions/actions":190,"../resources/habbitService":201,"moment":40,"react":179,"react-redux":46}],197:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -25930,17 +25917,36 @@ if (elm) {
     ), elm);
 }
 
-},{"./app.js":190,"./stores/AppStore":202,"react":179,"react-dom":43,"react-redux":46}],197:[function(require,module,exports){
+},{"./app.js":191,"./stores/AppStore":203,"react":179,"react-dom":43,"react-redux":46}],198:[function(require,module,exports){
 'use strict';
 
 var _require = require('./firebaseService');
 
-var auth = _require.auth;
+var firebase = _require.firebase;
 var facebookProvider = _require.facebookProvider;
 
+var auth = firebase.auth();
 
-function facebookLogin() {
-    return auth.signInWithPopup(facebookProvider);
+function facebookLogin(callback) {
+    var facebookProvider = new firebase.auth.FacebookAuthProvider();
+    facebookProvider.addScope('user_friends');
+    return auth.signInWithPopup(facebookProvider).then(function (_ref) {
+        var credential = _ref.credential;
+        var user = _ref.user;
+
+
+        // TODO: use token to access & store friends list
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        // var token = credential.accessToken;
+
+        var fbUser = user.providerData[0];
+        callback({
+            uid: user.uid,
+            facebook_id: fbUser.uid,
+            email: fbUser.email,
+            photo: fbUser.photoURL
+        });
+    });
 }
 
 function getSession(callback) {
@@ -25949,7 +25955,7 @@ function getSession(callback) {
 
 module.exports = { facebookLogin: facebookLogin, getSession: getSession };
 
-},{"./firebaseService":199}],198:[function(require,module,exports){
+},{"./firebaseService":200}],199:[function(require,module,exports){
 'use strict';
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -25967,14 +25973,14 @@ function initCats(uid) {
 function createNewCat(catName) {
     catRef.child(catName).once('value').then(function (snapshot) {
         if (!snapshot.exists()) {
-            catRef.set(_defineProperty({}, catName, true));
+            catRef.update(_defineProperty({}, catName, true));
         }
     });
 }
 
 module.exports = { initCats: initCats, createNewCat: createNewCat };
 
-},{"./firebaseService":199}],199:[function(require,module,exports){
+},{"./firebaseService":200}],200:[function(require,module,exports){
 'use strict';
 
 var firebase = require("firebase/app");
@@ -25988,16 +25994,14 @@ firebase.initializeApp({
     storageBucket: ""
 });
 
-var facebookProvider = new firebase.auth.FacebookAuthProvider();
-facebookProvider.addScope('user_friends');
-
 var db = firebase.database();
-var auth = firebase.auth();
 
-module.exports = { firebase: firebase, db: db, auth: auth, facebookProvider: facebookProvider };
+module.exports = { firebase: firebase, db: db };
 
-},{"firebase/app":28,"firebase/auth":29,"firebase/database":30}],200:[function(require,module,exports){
+},{"firebase/app":28,"firebase/auth":29,"firebase/database":30}],201:[function(require,module,exports){
 'use strict';
+
+var assign = require('object-assign');
 
 var _require = require('./firebaseService');
 
@@ -26014,36 +26018,38 @@ function initHabbits(uid) {
     return habbitRef = db.ref('user-habbits/' + uid);
 }
 
-function getHabbits() {
+function getHabbits(callback) {
     if (!habbitRef) return;
-    return habbitRef.once('value');
+    return habbitRef.once('value').then(function (snapshot) {
+        var obj = snapshot.val();
+        var keys = Object.keys(obj);
+        var arr = keys.map(function (key) {
+            return assign({}, obj[key], { key: key });
+        });
+        callback(arr);
+    });
 }
 
-function createNewHabbit(habbit) {
+function createNewHabbit(habbit, callback) {
     if (!habbitRef) return;
     var key = habbitRef.push().key;
     createNewCat(habbit.category);
-    return habbitRef.child(key).set(habbit);
+    return habbitRef.child(key).set(habbit, callback);
 }
 
 module.exports = { initHabbits: initHabbits, createNewHabbit: createNewHabbit, getHabbits: getHabbits };
 
-},{"./categoryService":198,"./firebaseService":199}],201:[function(require,module,exports){
+},{"./categoryService":199,"./firebaseService":200,"object-assign":41}],202:[function(require,module,exports){
 'use strict';
 
 var _require = require('./firebaseService');
 
 var db = _require.db;
-var auth = _require.auth;
 
 var userRef = undefined;
 
 function initUser(uid) {
     return userRef = db.ref('users/' + uid);
-}
-
-function getSessionUser() {
-    return auth.currentUser;
 }
 
 function setUserInfo(info) {
@@ -26054,9 +26060,9 @@ function setUserInfo(info) {
     });
 }
 
-module.exports = { initUser: initUser, getSessionUser: getSessionUser, setUserInfo: setUserInfo };
+module.exports = { initUser: initUser, setUserInfo: setUserInfo };
 
-},{"./firebaseService":199}],202:[function(require,module,exports){
+},{"./firebaseService":200}],203:[function(require,module,exports){
 'use strict';
 
 var _require = require('redux');
@@ -26083,7 +26089,7 @@ var AppStore = createStore(AppReducer, compose(applyMiddleware(thunk), window &&
 
 module.exports = AppStore;
 
-},{"./reducers/HabbitReducer":203,"./reducers/UserReducer":204,"./reducers/ViewReducer":205,"redux":186,"redux-thunk":180}],203:[function(require,module,exports){
+},{"./reducers/HabbitReducer":204,"./reducers/UserReducer":205,"./reducers/ViewReducer":206,"redux":186,"redux-thunk":180}],204:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26107,7 +26113,7 @@ function habbitReducer() {
 
 module.exports = habbitReducer;
 
-},{"object-assign":41}],204:[function(require,module,exports){
+},{"object-assign":41}],205:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26131,7 +26137,7 @@ function userReducer() {
 
 module.exports = userReducer;
 
-},{"object-assign":41}],205:[function(require,module,exports){
+},{"object-assign":41}],206:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26155,4 +26161,4 @@ function viewReducer() {
 
 module.exports = viewReducer;
 
-},{"object-assign":41}]},{},[196]);
+},{"object-assign":41}]},{},[197]);
