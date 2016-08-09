@@ -23,7 +23,8 @@ class HabbitListItem extends Component {
 
 HabbitListItem.propTypes = {
     name: PropTypes.string,
-    last_completed: PropTypes.string
+    last_completed: PropTypes.string,
+    onViewHabbit: PropTypes.func
 };
 HabbitListItem.defaultProps = {
     name: '',

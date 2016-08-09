@@ -1,14 +1,14 @@
 'use strict';
 
 const React = require('react');
+const {Component, PropTypes} = React;
 const {connect} = require('react-redux');
 const {facebookLogin} = require('../resources/authService');
-const actions = require('../actions/actions');
+const {initServices} = require('../lib/init');
+const actions = require('../lib/actions');
 const userService = require('../resources/userService');
-const habbitService = require('../resources/habbitService');
-const catService = require('../resources/categoryService');
 
-class Login extends React.Component {
+class Login extends Component {
 
     constructor(props) {
         super(props);
@@ -17,13 +17,8 @@ class Login extends React.Component {
     }
 
     initializeUser(uid) {
-        // Store UID for future use throughout app
         this.props.setUserId(uid);
-
-        // Initialize services
-        userService.initUser(uid);
-        habbitService.initHabbits(uid);
-        catService.initCats(uid);
+        initServices(uid);
     }
 
     handleFacebookLogin() {
@@ -48,5 +43,9 @@ function mapStateToProps(state) {
     return {
         uid: userData.uid
     };
+}
+Login.propTypes = {
+    setUserId: PropTypes.func,
+    changeView: PropTypes.func
 }
 module.exports = connect(mapStateToProps, actions)(Login);

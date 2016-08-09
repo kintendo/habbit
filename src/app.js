@@ -1,54 +1,26 @@
 'use strict';
 
 const React = require('react');
+const {Component, PropTypes} = React;
 const {connect} = require('react-redux');
-
-// Services
+const actions = require('./lib/actions');
+const {initServices} = require('./lib/init');
 const {getSession} = require('./resources/authService');
-const userService = require('./resources/userService');
-const habbitService = require('./resources/habbitService');
-const catService = require('./resources/categoryService');
-
-// Components
 const HabbitContent = require('./components/HabbitContent');
 
-// Config
-function mapStateToProps(state) {
-    const {viewData} = state;
-    return {
-        view: viewData.view
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        changeView: (view) => {
-            dispatch({type: 'CHANGE_VIEW', view});
-        },
-        setUserId: (uid) => {
-            dispatch({type: 'SET_USER_ID', uid});
-        }
-    }
-}
-
-class App extends React.Component {
+class App extends Component {
     constructor(props) {
         super(props);
         this.initializeUser = this.initializeUser.bind(this);
     }
 
     initializeUser(uid) {
-        // Store UID for future use throughout app
         this.props.setUserId(uid);
-
-        // Initialize services
-        userService.initUser(uid);
-        habbitService.initHabbits(uid);
-        catService.initCats(uid);
+        initServices(uid);
     }
 
     componentDidMount() {
-        const ap = getSession( ({uid}) => {
+        getSession( ({uid}) => {
             if (uid) {
                 this.initializeUser(uid);
                 this.props.changeView('list');
@@ -61,8 +33,6 @@ class App extends React.Component {
 
         return (
             <div>
-                Hello world.
-
                 <button onClick={changeView.bind(this, 'new')}>Add Habbit</button>
                 <HabbitContent view={view} />
             </div>
@@ -70,4 +40,15 @@ class App extends React.Component {
     }
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(App);
+function mapStateToProps(state) {
+    const {viewData} = state;
+    return {
+        view: viewData.view
+    };
+}
+App.propTypes = {
+    view: PropTypes.string,
+    changeView: PropTypes.func,
+    setUserId: PropTypes.func
+};
+module.exports = connect(mapStateToProps, actions)(App);

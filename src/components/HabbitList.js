@@ -1,12 +1,13 @@
 'use strict';
 
 const React = require('react');
+const {Component, PropTypes} = React;
 const {connect} = require('react-redux');
 const HabbitListItem = require('./HabbitListItem');
-const actions = require('../actions/actions');
+const actions = require('../lib/actions');
 const habbitService = require('../resources/habbitService');
 
-class HabbitList extends React.Component {
+class HabbitList extends Component {
 
     componentDidMount() {
         habbitService.getHabbits( (habbits) => {
@@ -38,7 +39,8 @@ function mapStateToProps(state) {
 }
 
 HabbitList.propTypes = {
-    habbits: React.PropTypes.array
+    setHabbits: PropTypes.func,
+    habbits: PropTypes.array
 };
 HabbitList.defaultProps = {
     habbits: []

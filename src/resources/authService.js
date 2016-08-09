@@ -1,12 +1,12 @@
 'use strict';
 
-const {firebase, facebookProvider} = require('./firebaseService');
+const {firebase} = require('./firebaseService');
 const auth = firebase.auth();
 
 function facebookLogin(callback) {
     const facebookProvider = new firebase.auth.FacebookAuthProvider();
     facebookProvider.addScope('user_friends');
-    return auth.signInWithPopup(facebookProvider).then( ({credential, user}) => {
+    return auth.signInWithPopup(facebookProvider).then( ({user}) => {
 
         // TODO: use token to access & store friends list
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.

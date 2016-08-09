@@ -25364,27 +25364,6 @@ module.exports = function symbolObservablePonyfill(root) {
 },{}],190:[function(require,module,exports){
 'use strict';
 
-function changeView(view) {
-    return { type: 'CHANGE_VIEW', view: view };
-}
-
-function setHabbits(habbits) {
-    return { type: 'SET_HABBITS', habbits: habbits };
-}
-
-function setUserId(uid) {
-    return { type: 'SET_USER_ID', uid: uid };
-}
-
-module.exports = {
-    changeView: changeView,
-    setHabbits: setHabbits,
-    setUserId: setUserId
-};
-
-},{}],191:[function(require,module,exports){
-'use strict';
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25399,38 +25378,17 @@ var _require = require('react-redux');
 
 var connect = _require.connect;
 
-// Services
+var actions = require('./lib/actions');
 
-var _require2 = require('./resources/authService');
+var _require2 = require('./lib/init');
 
-var getSession = _require2.getSession;
+var initServices = _require2.initServices;
 
-var userService = require('./resources/userService');
-var habbitService = require('./resources/habbitService');
-var catService = require('./resources/categoryService');
+var _require3 = require('./resources/authService');
 
-// Components
+var getSession = _require3.getSession;
+
 var HabbitContent = require('./components/HabbitContent');
-
-// Config
-function mapStateToProps(state) {
-    var viewData = state.viewData;
-
-    return {
-        view: viewData.view
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        changeView: function changeView(view) {
-            dispatch({ type: 'CHANGE_VIEW', view: view });
-        },
-        setUserId: function setUserId(uid) {
-            dispatch({ type: 'SET_USER_ID', uid: uid });
-        }
-    };
-}
 
 var App = function (_React$Component) {
     _inherits(App, _React$Component);
@@ -25447,13 +25405,8 @@ var App = function (_React$Component) {
     _createClass(App, [{
         key: 'initializeUser',
         value: function initializeUser(uid) {
-            // Store UID for future use throughout app
             this.props.setUserId(uid);
-
-            // Initialize services
-            userService.initUser(uid);
-            habbitService.initHabbits(uid);
-            catService.initCats(uid);
+            initServices(uid);
         }
     }, {
         key: 'componentDidMount',
@@ -25480,7 +25433,6 @@ var App = function (_React$Component) {
             return React.createElement(
                 'div',
                 null,
-                'Hello world.',
                 React.createElement(
                     'button',
                     { onClick: changeView.bind(this, 'new') },
@@ -25494,9 +25446,16 @@ var App = function (_React$Component) {
     return App;
 }(React.Component);
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(App);
+function mapStateToProps(state) {
+    var viewData = state.viewData;
 
-},{"./components/HabbitContent":192,"./resources/authService":198,"./resources/categoryService":199,"./resources/habbitService":201,"./resources/userService":202,"react":179,"react-redux":46}],192:[function(require,module,exports){
+    return {
+        view: viewData.view
+    };
+}
+module.exports = connect(mapStateToProps, actions)(App);
+
+},{"./components/HabbitContent":191,"./lib/actions":196,"./lib/init":197,"./resources/authService":199,"react":179,"react-redux":46}],191:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25548,7 +25507,7 @@ HabbitContent.defaultProps = {
 };
 module.exports = HabbitContent;
 
-},{"./HabbitList":193,"./Login":195,"./NewHabbitForm":196,"react":179}],193:[function(require,module,exports){
+},{"./HabbitList":192,"./Login":194,"./NewHabbitForm":195,"react":179}],192:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25566,7 +25525,7 @@ var _require = require('react-redux');
 var connect = _require.connect;
 
 var HabbitListItem = require('./HabbitListItem');
-var actions = require('../actions/actions');
+var actions = require('../lib/actions');
 var habbitService = require('../resources/habbitService');
 
 var HabbitList = function (_React$Component) {
@@ -25622,7 +25581,7 @@ HabbitList.defaultProps = {
 };
 module.exports = connect(mapStateToProps, actions)(HabbitList);
 
-},{"../actions/actions":190,"../resources/habbitService":201,"./HabbitListItem":194,"react":179,"react-redux":46}],194:[function(require,module,exports){
+},{"../lib/actions":196,"../resources/habbitService":202,"./HabbitListItem":193,"react":179,"react-redux":46}],193:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25693,7 +25652,7 @@ HabbitListItem.defaultProps = {
 };
 module.exports = HabbitListItem;
 
-},{"moment":40,"react":179}],195:[function(require,module,exports){
+},{"moment":40,"react":179}],194:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25714,10 +25673,12 @@ var _require2 = require('../resources/authService');
 
 var facebookLogin = _require2.facebookLogin;
 
-var actions = require('../actions/actions');
+var _require3 = require('../lib/init');
+
+var initServices = _require3.initServices;
+
+var actions = require('../lib/actions');
 var userService = require('../resources/userService');
-var habbitService = require('../resources/habbitService');
-var catService = require('../resources/categoryService');
 
 var Login = function (_React$Component) {
     _inherits(Login, _React$Component);
@@ -25735,13 +25696,8 @@ var Login = function (_React$Component) {
     _createClass(Login, [{
         key: 'initializeUser',
         value: function initializeUser(uid) {
-            // Store UID for future use throughout app
             this.props.setUserId(uid);
-
-            // Initialize services
-            userService.initUser(uid);
-            habbitService.initHabbits(uid);
-            catService.initCats(uid);
+            initServices(uid);
         }
     }, {
         key: 'handleFacebookLogin',
@@ -25781,7 +25737,7 @@ function mapStateToProps(state) {
 }
 module.exports = connect(mapStateToProps, actions)(Login);
 
-},{"../actions/actions":190,"../resources/authService":198,"../resources/categoryService":199,"../resources/habbitService":201,"../resources/userService":202,"react":179,"react-redux":46}],196:[function(require,module,exports){
+},{"../lib/actions":196,"../lib/init":197,"../resources/authService":199,"../resources/userService":203,"react":179,"react-redux":46}],195:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25800,7 +25756,7 @@ var _require = require('react-redux');
 var connect = _require.connect;
 
 var moment = require('moment');
-var actions = require('../actions/actions');
+var actions = require('../lib/actions');
 var habbitService = require('../resources/habbitService');
 
 var NewHabbitForm = function (_Component) {
@@ -25895,7 +25851,45 @@ NewHabbitForm.propTypes = {};
 NewHabbitForm.defaultProps = {};
 module.exports = connect(mapStateToProps, actions)(NewHabbitForm);
 
-},{"../actions/actions":190,"../resources/habbitService":201,"moment":40,"react":179,"react-redux":46}],197:[function(require,module,exports){
+},{"../lib/actions":196,"../resources/habbitService":202,"moment":40,"react":179,"react-redux":46}],196:[function(require,module,exports){
+'use strict';
+
+function changeView(view) {
+    return { type: 'CHANGE_VIEW', view: view };
+}
+
+function setHabbits(habbits) {
+    return { type: 'SET_HABBITS', habbits: habbits };
+}
+
+function setUserId(uid) {
+    return { type: 'SET_USER_ID', uid: uid };
+}
+
+module.exports = {
+    changeView: changeView,
+    setHabbits: setHabbits,
+    setUserId: setUserId
+};
+
+},{}],197:[function(require,module,exports){
+'use strict';
+
+var habbitService = require('../resources/habbitService');
+var catService = require('../resources/categoryService');
+var userService = require('../resources/userService');
+
+function initServices(uid) {
+    catService.initCats(uid);
+    habbitService.initHabbits(uid);
+    userService.initUser(uid);
+}
+
+module.exports = {
+    initServices: initServices
+};
+
+},{"../resources/categoryService":200,"../resources/habbitService":202,"../resources/userService":203}],198:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -25917,7 +25911,7 @@ if (elm) {
     ), elm);
 }
 
-},{"./app.js":191,"./stores/AppStore":203,"react":179,"react-dom":43,"react-redux":46}],198:[function(require,module,exports){
+},{"./app.js":190,"./stores/AppStore":204,"react":179,"react-dom":43,"react-redux":46}],199:[function(require,module,exports){
 'use strict';
 
 var _require = require('./firebaseService');
@@ -25955,7 +25949,7 @@ function getSession(callback) {
 
 module.exports = { facebookLogin: facebookLogin, getSession: getSession };
 
-},{"./firebaseService":200}],199:[function(require,module,exports){
+},{"./firebaseService":201}],200:[function(require,module,exports){
 'use strict';
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -25980,7 +25974,7 @@ function createNewCat(catName) {
 
 module.exports = { initCats: initCats, createNewCat: createNewCat };
 
-},{"./firebaseService":200}],200:[function(require,module,exports){
+},{"./firebaseService":201}],201:[function(require,module,exports){
 'use strict';
 
 var firebase = require("firebase/app");
@@ -25998,7 +25992,7 @@ var db = firebase.database();
 
 module.exports = { firebase: firebase, db: db };
 
-},{"firebase/app":28,"firebase/auth":29,"firebase/database":30}],201:[function(require,module,exports){
+},{"firebase/app":28,"firebase/auth":29,"firebase/database":30}],202:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26039,7 +26033,7 @@ function createNewHabbit(habbit, callback) {
 
 module.exports = { initHabbits: initHabbits, createNewHabbit: createNewHabbit, getHabbits: getHabbits };
 
-},{"./categoryService":199,"./firebaseService":200,"object-assign":41}],202:[function(require,module,exports){
+},{"./categoryService":200,"./firebaseService":201,"object-assign":41}],203:[function(require,module,exports){
 'use strict';
 
 var _require = require('./firebaseService');
@@ -26062,7 +26056,7 @@ function setUserInfo(info) {
 
 module.exports = { initUser: initUser, setUserInfo: setUserInfo };
 
-},{"./firebaseService":200}],203:[function(require,module,exports){
+},{"./firebaseService":201}],204:[function(require,module,exports){
 'use strict';
 
 var _require = require('redux');
@@ -26089,7 +26083,7 @@ var AppStore = createStore(AppReducer, compose(applyMiddleware(thunk), window &&
 
 module.exports = AppStore;
 
-},{"./reducers/HabbitReducer":204,"./reducers/UserReducer":205,"./reducers/ViewReducer":206,"redux":186,"redux-thunk":180}],204:[function(require,module,exports){
+},{"./reducers/HabbitReducer":205,"./reducers/UserReducer":206,"./reducers/ViewReducer":207,"redux":186,"redux-thunk":180}],205:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26113,7 +26107,7 @@ function habbitReducer() {
 
 module.exports = habbitReducer;
 
-},{"object-assign":41}],205:[function(require,module,exports){
+},{"object-assign":41}],206:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26137,7 +26131,7 @@ function userReducer() {
 
 module.exports = userReducer;
 
-},{"object-assign":41}],206:[function(require,module,exports){
+},{"object-assign":41}],207:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26161,4 +26155,4 @@ function viewReducer() {
 
 module.exports = viewReducer;
 
-},{"object-assign":41}]},{},[197]);
+},{"object-assign":41}]},{},[198]);

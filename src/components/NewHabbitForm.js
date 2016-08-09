@@ -1,10 +1,10 @@
 'use strict';
 
 const React = require('react');
-const {Component} = React;
+const {Component, PropTypes} = React;
 const {connect} = require('react-redux');
 const moment = require('moment');
-const actions = require('../actions/actions');
+const actions = require('../lib/actions');
 const habbitService = require('../resources/habbitService');
 
 class NewHabbitForm extends Component {
@@ -51,6 +51,7 @@ function mapStateToProps(state) {
     return state;
 }
 NewHabbitForm.propTypes = {
+    changeView: PropTypes.func
 };
 NewHabbitForm.defaultProps = {
 };
