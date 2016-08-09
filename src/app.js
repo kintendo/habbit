@@ -1,51 +1,73 @@
 'use strict';
 
 const React = require('react');
-const {facebookLogin} = require('./resources/authService');
+const {connect} = require('react-redux');
+
+// Services
+const {getSession} = require('./resources/authService');
 const userService = require('./resources/userService');
+const habbitService = require('./resources/habbitService');
+const catService = require('./resources/categoryService');
 
-// sub components
+// Components
+const HabbitContent = require('./components/HabbitContent');
 
-// list of categories
-    // search bar to search through habbits
-    // list of habbits under each category
-    // habbit
-        // name
-        // list of tags
-        // completion history
-        // category
+// Config
+function mapStateToProps(state) {
+    const {viewData} = state;
+    return {
+        view: viewData.view
+    };
+}
 
-// nav
-    // view habbits
-    // view categories
-    // view tags
-    // view settings
-
+function mapDispatchToProps(dispatch) {
+    return {
+        changeView: (view) => {
+            dispatch({type: 'CHANGE_VIEW', view});
+        },
+        setUserId: (uid) => {
+            dispatch({type: 'SET_USER_ID', uid});
+        }
+    }
+}
 
 class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.initializeUser = this.initializeUser.bind(this);
+    }
 
-    handleFacebookLogin () {
-        const facebookLoginPromise = facebookLogin();
-        facebookLoginPromise.then( (result) => {
-            console.log(result);
-            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-            var token = result.credential.accessToken;
-            // TODO: use token to access friends list
-            var user = result.user;
-            const fbUser = user.providerData[0];
-            userService.initUser(user.uid);
-            userService.setUserInfo({facebook_id: fbUser.uid, email: fbUser.email, photo: fbUser.photoURL});
+    initializeUser(uid) {
+        // Store UID for future use throughout app
+        this.props.setUserId(uid);
+
+        // Initialize services
+        userService.initUser(uid);
+        habbitService.initHabbits(uid);
+        catService.initCats(uid);
+    }
+
+    componentDidMount() {
+        const ap = getSession( ({uid}) => {
+            if (uid) {
+                this.initializeUser(uid);
+                this.props.changeView('list');
+            }
         });
     }
 
-    render (){
+    render() {
+        const {view, changeView} = this.props;
+
         return (
             <div>
                 Hello world.
-                <button onClick={this.handleFacebookLogin}>Facebook Login</button>
+
+                <button onClick={changeView.bind(this, 'new')}>Add Habbit</button>
+                <HabbitContent view={view} />
             </div>
         );
     }
 }
 
-module.exports = App;
+module.exports = connect(mapStateToProps, mapDispatchToProps)(App);

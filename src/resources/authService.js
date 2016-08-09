@@ -6,4 +6,8 @@ function facebookLogin() {
     return auth.signInWithPopup(facebookProvider);
 }
 
-module.exports = {facebookLogin};
+function getSession(callback) {
+    return auth.onAuthStateChanged(callback);
+}
+
+module.exports = {facebookLogin, getSession};
