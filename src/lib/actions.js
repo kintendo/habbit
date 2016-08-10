@@ -1,5 +1,9 @@
 'use strict';
 
+function setCurrentHabbit(habbit) {
+    return {type: 'SET_CURRENT_HABBIT', habbit};
+}
+
 function changeView(view) {
     return {type: 'CHANGE_VIEW', view};
 }
@@ -13,6 +17,7 @@ function setUserId(uid) {
 }
 
 module.exports = {
+    setCurrentHabbit,
     changeView,
     setHabbits,
     setUserId

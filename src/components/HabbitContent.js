@@ -4,6 +4,7 @@ const React = require('react');
 const HabbitList = require('./HabbitList');
 const NewHabbitForm = require('./NewHabbitForm');
 const Login = require('./Login');
+const Habbit = require('./Habbit');
 
 class HabbitContent extends React.Component {
 
@@ -12,7 +13,6 @@ class HabbitContent extends React.Component {
         const {view} = this.props;
 
         // TODO: add CategoryList
-        // TODO: add Habbit
         // TODO: add Category
         // TODO: add NewCatForm
 
@@ -21,6 +21,7 @@ class HabbitContent extends React.Component {
                 {view === 'login' ? <Login /> : null}
                 {view === 'list' ? <HabbitList /> : null}
                 {view === 'new' ? <NewHabbitForm /> : null}
+                {view === 'habbit' ? <Habbit /> : null}
             </div>
         );
     }

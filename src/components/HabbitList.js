@@ -15,6 +15,11 @@ class HabbitList extends Component {
         });
     }
 
+    handleViewHabbit (habbit) {
+        this.props.setCurrentHabbit(habbit);
+        this.props.changeView('habbit');
+    }
+
     render(){
 
         const {habbits} = this.props;
@@ -26,7 +31,10 @@ class HabbitList extends Component {
             <div>
                 {habbits.map( (habbit) => {
                     return (
-                        <HabbitListItem {...habbit}/>
+                        <HabbitListItem
+                            {...habbit}
+                            onViewHabbit={this.handleViewHabbit.bind(this, habbit)}
+                        />
                     );
                 })}
             </div>
@@ -43,7 +51,9 @@ function mapStateToProps(state) {
 
 HabbitList.propTypes = {
     setHabbits: PropTypes.func,
-    habbits: PropTypes.array
+    habbits: PropTypes.array,
+    setCurrentHabbit: PropTypes.func,
+    changeView: PropTypes.func
 };
 HabbitList.defaultProps = {
     habbits: []

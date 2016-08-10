@@ -1,6 +1,7 @@
 const assign = require('object-assign');
 const initialState = {
-    habbits: []
+    habbits: [],
+    currentHabbit: {}
 };
 
 function habbitReducer (state = initialState, action = {}) {
@@ -8,6 +9,10 @@ function habbitReducer (state = initialState, action = {}) {
     case 'SET_HABBITS':
         return assign({}, state, {
             habbits: action.habbits
+        });
+    case 'SET_CURRENT_HABBIT':
+        return assign({}, state, {
+            currentHabbit: action.habbit
         });
     default:
         return state;

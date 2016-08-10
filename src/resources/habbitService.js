@@ -28,4 +28,12 @@ function createNewHabbit(habbit, callback) {
     return habbitRef.child(key).set(habbit, callback);
 }
 
-module.exports = {initHabbits, createNewHabbit, getHabbits};
+function updateHabbit(habbit, callback) {
+    if (!habbitRef) return;
+    createNewCat(habbit.category);
+    const key = habbit.key;
+    delete habbit.key;
+    return habbitRef.child(key).update(habbit, callback);
+}
+
+module.exports = {initHabbits, createNewHabbit, getHabbits, updateHabbit};
