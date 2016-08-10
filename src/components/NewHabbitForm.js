@@ -5,7 +5,7 @@ const {Component, PropTypes} = React;
 const {connect} = require('react-redux');
 const moment = require('moment');
 const actions = require('../lib/actions');
-const habbitService = require('../resources/habbitService');
+const habbitService = require('../services/habbitService');
 
 class NewHabbitForm extends Component {
 

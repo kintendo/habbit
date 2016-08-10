@@ -1,6 +1,6 @@
-const habbitService = require('../resources/habbitService');
-const catService = require('../resources/categoryService');
-const userService = require('../resources/userService');
+const habbitService = require('../services/habbitService');
+const catService = require('../services/categoryService');
+const userService = require('../services/userService');
 
 function initServices(uid) {
     catService.initCats(uid);

@@ -25386,7 +25386,7 @@ var _require2 = require('./lib/init');
 
 var initServices = _require2.initServices;
 
-var _require3 = require('./resources/authService');
+var _require3 = require('./services/authService');
 
 var getSession = _require3.getSession;
 
@@ -25464,7 +25464,7 @@ App.propTypes = {
 };
 module.exports = connect(mapStateToProps, actions)(App);
 
-},{"./components/HabbitContent":192,"./components/Nav":196,"./lib/actions":198,"./lib/init":199,"./resources/authService":201,"react":179,"react-redux":46}],191:[function(require,module,exports){
+},{"./components/HabbitContent":192,"./components/Nav":196,"./lib/actions":198,"./lib/init":199,"./services/authService":201,"react":179,"react-redux":46}],191:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25486,7 +25486,7 @@ var connect = _require.connect;
 var assign = require('object-assign');
 var actions = require('../lib/actions');
 
-var _require2 = require('../resources/habbitService');
+var _require2 = require('../services/habbitService');
 
 var _updateHabbit = _require2.updateHabbit;
 
@@ -25604,7 +25604,7 @@ Habbit.defaultProps = {
 };
 module.exports = connect(mapStateToProps, actions)(Habbit);
 
-},{"../lib/actions":198,"../resources/habbitService":204,"object-assign":41,"react":179,"react-redux":46}],192:[function(require,module,exports){
+},{"../lib/actions":198,"../services/habbitService":204,"object-assign":41,"react":179,"react-redux":46}],192:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25684,7 +25684,7 @@ var connect = _require.connect;
 
 var HabbitListItem = require('./HabbitListItem');
 var actions = require('../lib/actions');
-var habbitService = require('../resources/habbitService');
+var habbitService = require('../services/habbitService');
 
 var HabbitList = function (_Component) {
     _inherits(HabbitList, _Component);
@@ -25754,7 +25754,7 @@ HabbitList.defaultProps = {
 };
 module.exports = connect(mapStateToProps, actions)(HabbitList);
 
-},{"../lib/actions":198,"../resources/habbitService":204,"./HabbitListItem":194,"react":179,"react-redux":46}],194:[function(require,module,exports){
+},{"../lib/actions":198,"../services/habbitService":204,"./HabbitListItem":194,"react":179,"react-redux":46}],194:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25845,7 +25845,7 @@ var _require = require('react-redux');
 
 var connect = _require.connect;
 
-var _require2 = require('../resources/authService');
+var _require2 = require('../services/authService');
 
 var facebookLogin = _require2.facebookLogin;
 
@@ -25854,7 +25854,7 @@ var _require3 = require('../lib/init');
 var initServices = _require3.initServices;
 
 var actions = require('../lib/actions');
-var userService = require('../resources/userService');
+var userService = require('../services/userService');
 
 var Login = function (_Component) {
     _inherits(Login, _Component);
@@ -25917,7 +25917,7 @@ Login.propTypes = {
 };
 module.exports = connect(mapStateToProps, actions)(Login);
 
-},{"../lib/actions":198,"../lib/init":199,"../resources/authService":201,"../resources/userService":205,"react":179,"react-redux":46}],196:[function(require,module,exports){
+},{"../lib/actions":198,"../lib/init":199,"../services/authService":201,"../services/userService":205,"react":179,"react-redux":46}],196:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -26007,7 +26007,7 @@ var connect = _require.connect;
 
 var moment = require('moment');
 var actions = require('../lib/actions');
-var habbitService = require('../resources/habbitService');
+var habbitService = require('../services/habbitService');
 
 var NewHabbitForm = function (_Component) {
     _inherits(NewHabbitForm, _Component);
@@ -26103,7 +26103,7 @@ NewHabbitForm.propTypes = {
 NewHabbitForm.defaultProps = {};
 module.exports = connect(mapStateToProps, actions)(NewHabbitForm);
 
-},{"../lib/actions":198,"../resources/habbitService":204,"moment":40,"react":179,"react-redux":46}],198:[function(require,module,exports){
+},{"../lib/actions":198,"../services/habbitService":204,"moment":40,"react":179,"react-redux":46}],198:[function(require,module,exports){
 'use strict';
 
 function setCurrentHabbit(habbit) {
@@ -26132,9 +26132,9 @@ module.exports = {
 },{}],199:[function(require,module,exports){
 'use strict';
 
-var habbitService = require('../resources/habbitService');
-var catService = require('../resources/categoryService');
-var userService = require('../resources/userService');
+var habbitService = require('../services/habbitService');
+var catService = require('../services/categoryService');
+var userService = require('../services/userService');
 
 function initServices(uid) {
     catService.initCats(uid);
@@ -26146,7 +26146,7 @@ module.exports = {
     initServices: initServices
 };
 
-},{"../resources/categoryService":202,"../resources/habbitService":204,"../resources/userService":205}],200:[function(require,module,exports){
+},{"../services/categoryService":202,"../services/habbitService":204,"../services/userService":205}],200:[function(require,module,exports){
 'use strict';
 
 var React = require('react');

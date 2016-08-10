@@ -3,10 +3,10 @@
 const React = require('react');
 const {Component, PropTypes} = React;
 const {connect} = require('react-redux');
-const {facebookLogin} = require('../resources/authService');
+const {facebookLogin} = require('../services/authService');
 const {initServices} = require('../lib/init');
 const actions = require('../lib/actions');
-const userService = require('../resources/userService');
+const userService = require('../services/userService');
 
 class Login extends Component {
 

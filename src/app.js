@@ -5,7 +5,7 @@ const {Component, PropTypes} = React;
 const {connect} = require('react-redux');
 const actions = require('./lib/actions');
 const {initServices} = require('./lib/init');
-const {getSession} = require('./resources/authService');
+const {getSession} = require('./services/authService');
 const HabbitContent = require('./components/HabbitContent');
 const Nav = require('./components/Nav');
 

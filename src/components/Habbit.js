@@ -5,7 +5,7 @@ const {Component, PropTypes} = React;
 const {connect} = require('react-redux');
 const assign = require('object-assign');
 const actions = require('../lib/actions');
-const {updateHabbit} = require('../resources/habbitService');
+const {updateHabbit} = require('../services/habbitService');
 
 class Habbit extends Component {
 
