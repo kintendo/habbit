@@ -14,6 +14,12 @@ function habbitReducer (state = initialState, action = {}) {
         return assign({}, state, {
             currentHabbit: action.habbit
         });
+    case 'UPDATE_SINGLE_HABBIT':
+        return assign({}, state, {
+            habbits: state.habbits.map( (habbit) => {
+                return (habbit.key === action.habbit.key) ? action.habbit : habbit;
+            })
+        });
     default:
         return state;
     }

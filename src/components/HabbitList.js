@@ -6,6 +6,8 @@ const {connect} = require('react-redux');
 const HabbitListItem = require('./HabbitListItem');
 const actions = require('../lib/actions');
 const habbitService = require('../services/habbitService');
+const moment = require('moment');
+const assign = require('object-assign');
 
 class HabbitList extends Component {
 
@@ -20,12 +22,21 @@ class HabbitList extends Component {
         this.props.changeView('habbit');
     }
 
+    handleCompleteHabbit (habbit) {
+        const newHabbit = assign({}, habbit, {
+            last_completed: moment().format(),
+            history: assign({}, habbit.history, {[habbit.last_completed]: true})
+        });
+        habbitService.updateHabbit(newHabbit, (err) => {
+            if (!err) {
+                this.props.updateSingleHabbit(newHabbit);
+            }
+        });
+    }
+
     render(){
 
         const {habbits} = this.props;
-
-        // TODO: onViewHabbit
-        // TODO: onCompleteHabbit
 
         return (
             <div>
@@ -34,6 +45,7 @@ class HabbitList extends Component {
                         <HabbitListItem
                             {...habbit}
                             onViewHabbit={this.handleViewHabbit.bind(this, habbit)}
+                            onCompleteHabbit={this.handleCompleteHabbit.bind(this, habbit)}
                         />
                     );
                 })}
@@ -50,10 +62,11 @@ function mapStateToProps(state) {
 }
 
 HabbitList.propTypes = {
-    setHabbits: PropTypes.func,
     habbits: PropTypes.array,
+    changeView: PropTypes.func,
     setCurrentHabbit: PropTypes.func,
-    changeView: PropTypes.func
+    setHabbits: PropTypes.func,
+    updateSingleHabbit: PropTypes.func
 };
 HabbitList.defaultProps = {
     habbits: []

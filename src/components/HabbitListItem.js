@@ -7,14 +7,15 @@ const moment = require('moment');
 class HabbitListItem extends Component {
 
     render (){
-        const {name, last_completed, onViewHabbit} = this.props;
+        const {name, category, last_completed, onCompleteHabbit, onViewHabbit} = this.props;
 
         return (
             <div>
-                <input type='checkbox' />
+                <span onClick={onCompleteHabbit}>✅</span>
                 <div onClick={onViewHabbit}>
-                    <span>{name}</span>
-                    <span>Last Completed: {moment(last_completed).format()}</span>
+                    <span>{name}</span> <br />
+                    <span>{category}</span> <br />
+                    <span>Last Completed: {moment(last_completed).fromNow()}</span>
                 </div>
             </div>
         );
@@ -22,12 +23,15 @@ class HabbitListItem extends Component {
 }
 
 HabbitListItem.propTypes = {
-    name: PropTypes.string,
+    category: PropTypes.string,
     last_completed: PropTypes.string,
-    onViewHabbit: PropTypes.func
+    name: PropTypes.string,
+    onCompleteHabbit: PropTypes.func,
+    onViewHabbit: PropTypes.func,
 };
 HabbitListItem.defaultProps = {
     name: '',
-    onViewHabbit: () => {}
+    onViewHabbit: () => {},
+    onCompleteHabbit: () => {}
 };
 module.exports = HabbitListItem;

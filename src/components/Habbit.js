@@ -5,6 +5,7 @@ const {Component, PropTypes} = React;
 const {connect} = require('react-redux');
 const assign = require('object-assign');
 const actions = require('../lib/actions');
+const moment = require('moment');
 const {updateHabbit} = require('../services/habbitService');
 
 class Habbit extends Component {
@@ -58,7 +59,14 @@ class Habbit extends Component {
                         <button onClick={this.updateHabbit}>Save Changes</button>
                     </div> :
                     <div>
-                        {habbit.name}
+                        <span>{habbit.name}</span>
+                        <ul>
+                            {habbit.history && Object.keys(habbit.history).map( (key) => {
+                                return (
+                                    <li>{moment(key).format('MMMM Do, YYYY @ h:mm:ss a')}</li>
+                                );
+                            })}
+                        </ul>
                     </div>
                 }
             </div>

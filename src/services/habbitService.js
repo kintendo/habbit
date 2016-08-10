@@ -31,9 +31,9 @@ function createNewHabbit(habbit, callback) {
 function updateHabbit(habbit, callback) {
     if (!habbitRef) return;
     createNewCat(habbit.category);
-    const key = habbit.key;
-    delete habbit.key;
-    return habbitRef.child(key).update(habbit, callback);
+    const _habbit = assign({}, habbit);
+    delete _habbit.key;
+    return habbitRef.child(habbit.key).update(_habbit, callback);
 }
 
 module.exports = {initHabbits, createNewHabbit, getHabbits, updateHabbit};
