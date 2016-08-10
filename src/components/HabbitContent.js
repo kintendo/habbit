@@ -11,6 +11,11 @@ class HabbitContent extends React.Component {
 
         const {view} = this.props;
 
+        // TODO: add CategoryList
+        // TODO: add Habbit
+        // TODO: add Category
+        // TODO: add NewCatForm
+
         return (
             <div>
                 {view === 'login' ? <Login /> : null}

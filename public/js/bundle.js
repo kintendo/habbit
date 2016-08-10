@@ -25373,6 +25373,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
+var Component = React.Component;
+var PropTypes = React.PropTypes;
 
 var _require = require('react-redux');
 
@@ -25389,9 +25391,10 @@ var _require3 = require('./resources/authService');
 var getSession = _require3.getSession;
 
 var HabbitContent = require('./components/HabbitContent');
+var Nav = require('./components/Nav');
 
-var App = function (_React$Component) {
-    _inherits(App, _React$Component);
+var App = function (_Component) {
+    _inherits(App, _Component);
 
     function App(props) {
         _classCallCheck(this, App);
@@ -25413,7 +25416,7 @@ var App = function (_React$Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            var ap = getSession(function (_ref) {
+            getSession(function (_ref) {
                 var uid = _ref.uid;
 
                 if (uid) {
@@ -25427,35 +25430,42 @@ var App = function (_React$Component) {
         value: function render() {
             var _props = this.props;
             var view = _props.view;
-            var changeView = _props.changeView;
+            var uid = _props.uid;
 
+            // TODO: add nav bar
 
             return React.createElement(
                 'div',
                 null,
-                React.createElement(
-                    'button',
-                    { onClick: changeView.bind(this, 'new') },
-                    'Add Habbit'
-                ),
+                uid ? React.createElement(Nav, null) : null,
                 React.createElement(HabbitContent, { view: view })
             );
         }
     }]);
 
     return App;
-}(React.Component);
+}(Component);
 
 function mapStateToProps(state) {
     var viewData = state.viewData;
+    var userData = state.userData;
 
     return {
-        view: viewData.view
+        view: viewData.view,
+        uid: userData.uid
     };
 }
+App.propTypes = {
+    // state
+    uid: PropTypes.string,
+    view: PropTypes.string,
+    // actions
+    changeView: PropTypes.func,
+    setUserId: PropTypes.func
+};
 module.exports = connect(mapStateToProps, actions)(App);
 
-},{"./components/HabbitContent":191,"./lib/actions":196,"./lib/init":197,"./resources/authService":199,"react":179,"react-redux":46}],191:[function(require,module,exports){
+},{"./components/HabbitContent":191,"./components/Nav":195,"./lib/actions":197,"./lib/init":198,"./resources/authService":200,"react":179,"react-redux":46}],191:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25485,6 +25495,10 @@ var HabbitContent = function (_React$Component) {
         value: function render() {
             var view = this.props.view;
 
+            // TODO: add CategoryList
+            // TODO: add Habbit
+            // TODO: add Category
+            // TODO: add NewCatForm
 
             return React.createElement(
                 'div',
@@ -25507,7 +25521,7 @@ HabbitContent.defaultProps = {
 };
 module.exports = HabbitContent;
 
-},{"./HabbitList":192,"./Login":194,"./NewHabbitForm":195,"react":179}],192:[function(require,module,exports){
+},{"./HabbitList":192,"./Login":194,"./NewHabbitForm":196,"react":179}],192:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25519,6 +25533,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
+var Component = React.Component;
+var PropTypes = React.PropTypes;
 
 var _require = require('react-redux');
 
@@ -25528,8 +25544,8 @@ var HabbitListItem = require('./HabbitListItem');
 var actions = require('../lib/actions');
 var habbitService = require('../resources/habbitService');
 
-var HabbitList = function (_React$Component) {
-    _inherits(HabbitList, _React$Component);
+var HabbitList = function (_Component) {
+    _inherits(HabbitList, _Component);
 
     function HabbitList() {
         _classCallCheck(this, HabbitList);
@@ -25551,6 +25567,8 @@ var HabbitList = function (_React$Component) {
         value: function render() {
             var habbits = this.props.habbits;
 
+            // TODO: onViewHabbit
+            // TODO: onCompleteHabbit
 
             return React.createElement(
                 'div',
@@ -25563,7 +25581,7 @@ var HabbitList = function (_React$Component) {
     }]);
 
     return HabbitList;
-}(React.Component);
+}(Component);
 
 function mapStateToProps(state) {
     var habbitData = state.habbitData;
@@ -25574,14 +25592,15 @@ function mapStateToProps(state) {
 }
 
 HabbitList.propTypes = {
-    habbits: React.PropTypes.array
+    setHabbits: PropTypes.func,
+    habbits: PropTypes.array
 };
 HabbitList.defaultProps = {
     habbits: []
 };
 module.exports = connect(mapStateToProps, actions)(HabbitList);
 
-},{"../lib/actions":196,"../resources/habbitService":202,"./HabbitListItem":193,"react":179,"react-redux":46}],193:[function(require,module,exports){
+},{"../lib/actions":197,"../resources/habbitService":203,"./HabbitListItem":193,"react":179,"react-redux":46}],193:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25644,7 +25663,8 @@ var HabbitListItem = function (_Component) {
 
 HabbitListItem.propTypes = {
     name: PropTypes.string,
-    last_completed: PropTypes.string
+    last_completed: PropTypes.string,
+    onViewHabbit: PropTypes.func
 };
 HabbitListItem.defaultProps = {
     name: '',
@@ -25664,6 +25684,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
+var Component = React.Component;
+var PropTypes = React.PropTypes;
 
 var _require = require('react-redux');
 
@@ -25680,8 +25702,8 @@ var initServices = _require3.initServices;
 var actions = require('../lib/actions');
 var userService = require('../resources/userService');
 
-var Login = function (_React$Component) {
-    _inherits(Login, _React$Component);
+var Login = function (_Component) {
+    _inherits(Login, _Component);
 
     function Login(props) {
         _classCallCheck(this, Login);
@@ -25726,7 +25748,7 @@ var Login = function (_React$Component) {
     }]);
 
     return Login;
-}(React.Component);
+}(Component);
 
 function mapStateToProps(state) {
     var userData = state.userData;
@@ -25735,9 +25757,13 @@ function mapStateToProps(state) {
         uid: userData.uid
     };
 }
+Login.propTypes = {
+    setUserId: PropTypes.func,
+    changeView: PropTypes.func
+};
 module.exports = connect(mapStateToProps, actions)(Login);
 
-},{"../lib/actions":196,"../lib/init":197,"../resources/authService":199,"../resources/userService":203,"react":179,"react-redux":46}],195:[function(require,module,exports){
+},{"../lib/actions":197,"../lib/init":198,"../resources/authService":200,"../resources/userService":204,"react":179,"react-redux":46}],195:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25750,6 +25776,76 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var React = require('react');
 var Component = React.Component;
+var PropTypes = React.PropTypes;
+
+var _require = require('react-redux');
+
+var connect = _require.connect;
+
+var actions = require('../lib/actions');
+
+var Nav = function (_Component) {
+    _inherits(Nav, _Component);
+
+    function Nav() {
+        _classCallCheck(this, Nav);
+
+        return _possibleConstructorReturn(this, Object.getPrototypeOf(Nav).apply(this, arguments));
+    }
+
+    _createClass(Nav, [{
+        key: 'render',
+        value: function render() {
+            var changeView = this.props.changeView;
+
+
+            return React.createElement(
+                'div',
+                null,
+                React.createElement(
+                    'button',
+                    { onClick: changeView.bind(this, 'list') },
+                    'Habbits'
+                ),
+                React.createElement(
+                    'button',
+                    { onClick: changeView.bind(this, 'cats') },
+                    'Categories'
+                ),
+                React.createElement(
+                    'button',
+                    { onClick: changeView.bind(this, 'new') },
+                    'New Habbit'
+                )
+            );
+        }
+    }]);
+
+    return Nav;
+}(Component);
+
+function mapStateToProps(state) {
+    return state;
+}
+Nav.propTypes = {
+    changeView: PropTypes.func
+};
+module.exports = connect(mapStateToProps, actions)(Nav);
+
+},{"../lib/actions":197,"react":179,"react-redux":46}],196:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var React = require('react');
+var Component = React.Component;
+var PropTypes = React.PropTypes;
 
 var _require = require('react-redux');
 
@@ -25847,11 +25943,13 @@ var NewHabbitForm = function (_Component) {
 function mapStateToProps(state) {
     return state;
 }
-NewHabbitForm.propTypes = {};
+NewHabbitForm.propTypes = {
+    changeView: PropTypes.func
+};
 NewHabbitForm.defaultProps = {};
 module.exports = connect(mapStateToProps, actions)(NewHabbitForm);
 
-},{"../lib/actions":196,"../resources/habbitService":202,"moment":40,"react":179,"react-redux":46}],196:[function(require,module,exports){
+},{"../lib/actions":197,"../resources/habbitService":203,"moment":40,"react":179,"react-redux":46}],197:[function(require,module,exports){
 'use strict';
 
 function changeView(view) {
@@ -25872,7 +25970,7 @@ module.exports = {
     setUserId: setUserId
 };
 
-},{}],197:[function(require,module,exports){
+},{}],198:[function(require,module,exports){
 'use strict';
 
 var habbitService = require('../resources/habbitService');
@@ -25889,7 +25987,7 @@ module.exports = {
     initServices: initServices
 };
 
-},{"../resources/categoryService":200,"../resources/habbitService":202,"../resources/userService":203}],198:[function(require,module,exports){
+},{"../resources/categoryService":201,"../resources/habbitService":203,"../resources/userService":204}],199:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -25911,13 +26009,12 @@ if (elm) {
     ), elm);
 }
 
-},{"./app.js":190,"./stores/AppStore":204,"react":179,"react-dom":43,"react-redux":46}],199:[function(require,module,exports){
+},{"./app.js":190,"./stores/AppStore":205,"react":179,"react-dom":43,"react-redux":46}],200:[function(require,module,exports){
 'use strict';
 
 var _require = require('./firebaseService');
 
 var firebase = _require.firebase;
-var facebookProvider = _require.facebookProvider;
 
 var auth = firebase.auth();
 
@@ -25925,7 +26022,6 @@ function facebookLogin(callback) {
     var facebookProvider = new firebase.auth.FacebookAuthProvider();
     facebookProvider.addScope('user_friends');
     return auth.signInWithPopup(facebookProvider).then(function (_ref) {
-        var credential = _ref.credential;
         var user = _ref.user;
 
 
@@ -25949,7 +26045,7 @@ function getSession(callback) {
 
 module.exports = { facebookLogin: facebookLogin, getSession: getSession };
 
-},{"./firebaseService":201}],200:[function(require,module,exports){
+},{"./firebaseService":202}],201:[function(require,module,exports){
 'use strict';
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -25974,7 +26070,7 @@ function createNewCat(catName) {
 
 module.exports = { initCats: initCats, createNewCat: createNewCat };
 
-},{"./firebaseService":201}],201:[function(require,module,exports){
+},{"./firebaseService":202}],202:[function(require,module,exports){
 'use strict';
 
 var firebase = require("firebase/app");
@@ -25992,7 +26088,7 @@ var db = firebase.database();
 
 module.exports = { firebase: firebase, db: db };
 
-},{"firebase/app":28,"firebase/auth":29,"firebase/database":30}],202:[function(require,module,exports){
+},{"firebase/app":28,"firebase/auth":29,"firebase/database":30}],203:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26033,7 +26129,7 @@ function createNewHabbit(habbit, callback) {
 
 module.exports = { initHabbits: initHabbits, createNewHabbit: createNewHabbit, getHabbits: getHabbits };
 
-},{"./categoryService":200,"./firebaseService":201,"object-assign":41}],203:[function(require,module,exports){
+},{"./categoryService":201,"./firebaseService":202,"object-assign":41}],204:[function(require,module,exports){
 'use strict';
 
 var _require = require('./firebaseService');
@@ -26056,7 +26152,7 @@ function setUserInfo(info) {
 
 module.exports = { initUser: initUser, setUserInfo: setUserInfo };
 
-},{"./firebaseService":201}],204:[function(require,module,exports){
+},{"./firebaseService":202}],205:[function(require,module,exports){
 'use strict';
 
 var _require = require('redux');
@@ -26083,7 +26179,7 @@ var AppStore = createStore(AppReducer, compose(applyMiddleware(thunk), window &&
 
 module.exports = AppStore;
 
-},{"./reducers/HabbitReducer":205,"./reducers/UserReducer":206,"./reducers/ViewReducer":207,"redux":186,"redux-thunk":180}],205:[function(require,module,exports){
+},{"./reducers/HabbitReducer":206,"./reducers/UserReducer":207,"./reducers/ViewReducer":208,"redux":186,"redux-thunk":180}],206:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26107,7 +26203,7 @@ function habbitReducer() {
 
 module.exports = habbitReducer;
 
-},{"object-assign":41}],206:[function(require,module,exports){
+},{"object-assign":41}],207:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26131,7 +26227,7 @@ function userReducer() {
 
 module.exports = userReducer;
 
-},{"object-assign":41}],207:[function(require,module,exports){
+},{"object-assign":41}],208:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26155,4 +26251,4 @@ function viewReducer() {
 
 module.exports = viewReducer;
 
-},{"object-assign":41}]},{},[198]);
+},{"object-assign":41}]},{},[199]);

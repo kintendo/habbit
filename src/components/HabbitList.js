@@ -19,6 +19,9 @@ class HabbitList extends Component {
 
         const {habbits} = this.props;
 
+        // TODO: onViewHabbit
+        // TODO: onCompleteHabbit
+
         return (
             <div>
                 {habbits.map( (habbit) => {

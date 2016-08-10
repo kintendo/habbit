@@ -7,6 +7,7 @@ const actions = require('./lib/actions');
 const {initServices} = require('./lib/init');
 const {getSession} = require('./resources/authService');
 const HabbitContent = require('./components/HabbitContent');
+const Nav = require('./components/Nav');
 
 class App extends Component {
     constructor(props) {
@@ -29,11 +30,11 @@ class App extends Component {
     }
 
     render() {
-        const {view, changeView} = this.props;
+        const {view, uid} = this.props;
 
         return (
             <div>
-                <button onClick={changeView.bind(this, 'new')}>Add Habbit</button>
+                {uid ? <Nav /> : null}
                 <HabbitContent view={view} />
             </div>
         );
@@ -41,13 +42,17 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-    const {viewData} = state;
+    const {viewData, userData} = state;
     return {
-        view: viewData.view
+        view: viewData.view,
+        uid: userData.uid
     };
 }
 App.propTypes = {
+    // state
+    uid: PropTypes.string,
     view: PropTypes.string,
+    // actions
     changeView: PropTypes.func,
     setUserId: PropTypes.func
 };
