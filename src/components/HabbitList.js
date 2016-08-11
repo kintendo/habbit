@@ -37,6 +37,8 @@ class HabbitList extends Component {
     render(){
 
         const {habbits} = this.props;
+        // TODO: group by cat
+        // TODO: sort by cat
 
         return (
             <div>

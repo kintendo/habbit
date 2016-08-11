@@ -13,7 +13,7 @@ class Nav extends Component {
         return (
             <div>
                 <button onClick={changeView.bind(this, 'list')}>Habbits</button>
-                <button onClick={changeView.bind(this, 'cats')}>Categories</button>
+                <button onClick={changeView.bind(this, 'cat-list')}>Categories</button>
                 <button onClick={changeView.bind(this, 'new')}>New Habbit</button>
             </div>
         );

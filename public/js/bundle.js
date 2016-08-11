@@ -25509,7 +25509,191 @@ App.propTypes = {
 };
 module.exports = connect(mapStateToProps, actions)(App);
 
-},{"./components/HabbitContent":192,"./components/Nav":196,"./lib/actions":198,"./lib/init":199,"./services/authService":201,"react":179,"react-redux":46}],191:[function(require,module,exports){
+},{"./components/HabbitContent":194,"./components/Nav":198,"./lib/actions":200,"./lib/init":201,"./services/authService":203,"react":179,"react-redux":46}],191:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var React = require('react');
+var Component = React.Component;
+var PropTypes = React.PropTypes;
+
+var _require = require('react-redux');
+
+var connect = _require.connect;
+
+var actions = require('../lib/actions');
+
+var Category = function (_Component) {
+    _inherits(Category, _Component);
+
+    function Category(props) {
+        _classCallCheck(this, Category);
+
+        return _possibleConstructorReturn(this, Object.getPrototypeOf(Category).call(this, props));
+    }
+
+    _createClass(Category, [{
+        key: 'render',
+        value: function render() {
+            var _props = this.props;
+            var cat = _props.cat;
+            var changeView = _props.changeView;
+
+            // TODO: make cats sortable
+
+            return React.createElement(
+                'div',
+                null,
+                React.createElement(
+                    'div',
+                    null,
+                    React.createElement(
+                        'button',
+                        { onClick: changeView.bind(this, 'cat-list') },
+                        'Back'
+                    )
+                ),
+                React.createElement(
+                    'div',
+                    null,
+                    React.createElement(
+                        'span',
+                        null,
+                        cat.name
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Category;
+}(Component);
+
+function mapStateToProps(state) {
+    var catData = state.catData;
+
+    return {
+        cat: catData.currentCat
+    };
+}
+
+Category.propTypes = {
+    cat: PropTypes.object,
+    changeView: PropTypes.func
+};
+Category.defaultProps = {
+    cat: {}
+};
+module.exports = connect(mapStateToProps, actions)(Category);
+
+},{"../lib/actions":200,"react":179,"react-redux":46}],192:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var React = require('react');
+var Component = React.Component;
+var PropTypes = React.PropTypes;
+
+var _require = require('react-redux');
+
+var connect = _require.connect;
+
+var actions = require('../lib/actions');
+var categoryService = require('../services/categoryService');
+
+var CategoryList = function (_Component) {
+    _inherits(CategoryList, _Component);
+
+    function CategoryList(props) {
+        _classCallCheck(this, CategoryList);
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CategoryList).call(this, props));
+
+        _this.handleViewCat = _this.handleViewCat.bind(_this);
+        return _this;
+    }
+
+    _createClass(CategoryList, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            categoryService.getCats(function (cats) {
+                _this2.props.setCats(cats);
+            });
+        }
+    }, {
+        key: 'handleViewCat',
+        value: function handleViewCat(cat) {
+            this.props.setCurrentCat(cat);
+            this.props.changeView('cat');
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            var cats = this.props.cats;
+
+            // TODO: make cats sortable
+            // TODO: add category
+            // TODO: delete category
+
+            return React.createElement(
+                'div',
+                null,
+                React.createElement(
+                    'ul',
+                    null,
+                    cats.map(function (cat) {
+                        return React.createElement(
+                            'li',
+                            { onClick: _this3.handleViewCat.bind(_this3, cat) },
+                            cat.name
+                        );
+                    })
+                )
+            );
+        }
+    }]);
+
+    return CategoryList;
+}(Component);
+
+function mapStateToProps(state) {
+    var catData = state.catData;
+
+    return {
+        cats: catData.cats
+    };
+}
+
+CategoryList.propTypes = {
+    cats: PropTypes.array,
+    changeView: PropTypes.func,
+    setCurrentCat: PropTypes.func,
+    setCats: PropTypes.func
+};
+CategoryList.defaultProps = {
+    cats: []
+};
+module.exports = connect(mapStateToProps, actions)(CategoryList);
+
+},{"../lib/actions":200,"../services/categoryService":204,"react":179,"react-redux":46}],193:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25563,7 +25747,9 @@ var Habbit = function (_Component) {
             var setCurrentHabbit = _props.setCurrentHabbit;
 
             var newHabbit = assign({}, habbit, {
-                name: this.inputRef.value
+                name: this.nameInputRef.value,
+                category: this.catInputRef.value,
+                description: this.descInputRef.value
             });
             _updateHabbit(newHabbit, function (err) {
                 if (!err) {
@@ -25586,8 +25772,7 @@ var Habbit = function (_Component) {
             var habbit = _props2.habbit;
             var changeView = _props2.changeView;
             var editMode = this.state.editMode;
-
-            // TODO: add history
+            // delete habbit
 
             return React.createElement(
                 'div',
@@ -25613,9 +25798,42 @@ var Habbit = function (_Component) {
                 editMode ? React.createElement(
                     'div',
                     null,
-                    React.createElement('input', { ref: function ref(c) {
-                            return _this3.inputRef = c;
-                        }, defaultValue: habbit.name }),
+                    React.createElement(
+                        'div',
+                        null,
+                        React.createElement(
+                            'label',
+                            null,
+                            'Name:'
+                        ),
+                        React.createElement('input', { ref: function ref(c) {
+                                return _this3.nameInputRef = c;
+                            }, defaultValue: habbit.name })
+                    ),
+                    React.createElement(
+                        'div',
+                        null,
+                        React.createElement(
+                            'label',
+                            null,
+                            'Description:'
+                        ),
+                        React.createElement('input', { ref: function ref(c) {
+                                return _this3.descInputRef = c;
+                            }, defaultValue: habbit.description })
+                    ),
+                    React.createElement(
+                        'div',
+                        null,
+                        React.createElement(
+                            'label',
+                            null,
+                            'Category:'
+                        ),
+                        React.createElement('input', { ref: function ref(c) {
+                                return _this3.catInputRef = c;
+                            }, defaultValue: habbit.category })
+                    ),
                     React.createElement(
                         'button',
                         { onClick: this.updateHabbit },
@@ -25665,7 +25883,7 @@ Habbit.defaultProps = {
 };
 module.exports = connect(mapStateToProps, actions)(Habbit);
 
-},{"../lib/actions":198,"../services/habbitService":204,"moment":40,"object-assign":41,"react":179,"react-redux":46}],192:[function(require,module,exports){
+},{"../lib/actions":200,"../services/habbitService":206,"moment":40,"object-assign":41,"react":179,"react-redux":46}],194:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25681,6 +25899,9 @@ var HabbitList = require('./HabbitList');
 var NewHabbitForm = require('./NewHabbitForm');
 var Login = require('./Login');
 var Habbit = require('./Habbit');
+var CategoryList = require('./CategoryList');
+var Category = require('./Category');
+// const NewCatForm = require('./NewCatForm');
 
 var HabbitContent = function (_React$Component) {
     _inherits(HabbitContent, _React$Component);
@@ -25696,9 +25917,6 @@ var HabbitContent = function (_React$Component) {
         value: function render() {
             var view = this.props.view;
 
-            // TODO: add CategoryList
-            // TODO: add Category
-            // TODO: add NewCatForm
 
             return React.createElement(
                 'div',
@@ -25706,7 +25924,9 @@ var HabbitContent = function (_React$Component) {
                 view === 'login' ? React.createElement(Login, null) : null,
                 view === 'list' ? React.createElement(HabbitList, null) : null,
                 view === 'new' ? React.createElement(NewHabbitForm, null) : null,
-                view === 'habbit' ? React.createElement(Habbit, null) : null
+                view === 'habbit' ? React.createElement(Habbit, null) : null,
+                view === 'cat-list' ? React.createElement(CategoryList, null) : null,
+                view === 'cat' ? React.createElement(Category, null) : null
             );
         }
     }]);
@@ -25722,7 +25942,7 @@ HabbitContent.defaultProps = {
 };
 module.exports = HabbitContent;
 
-},{"./Habbit":191,"./HabbitList":193,"./Login":195,"./NewHabbitForm":197,"react":179}],193:[function(require,module,exports){
+},{"./Category":191,"./CategoryList":192,"./Habbit":193,"./HabbitList":195,"./Login":197,"./NewHabbitForm":199,"react":179}],195:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -25834,7 +26054,7 @@ HabbitList.defaultProps = {
 };
 module.exports = connect(mapStateToProps, actions)(HabbitList);
 
-},{"../lib/actions":198,"../services/habbitService":204,"./HabbitListItem":194,"moment":40,"object-assign":41,"react":179,"react-redux":46}],194:[function(require,module,exports){
+},{"../lib/actions":200,"../services/habbitService":206,"./HabbitListItem":196,"moment":40,"object-assign":41,"react":179,"react-redux":46}],196:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -25924,7 +26144,7 @@ HabbitListItem.defaultProps = {
 };
 module.exports = HabbitListItem;
 
-},{"moment":40,"react":179}],195:[function(require,module,exports){
+},{"moment":40,"react":179}],197:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -26015,7 +26235,7 @@ Login.propTypes = {
 };
 module.exports = connect(mapStateToProps, actions)(Login);
 
-},{"../lib/actions":198,"../lib/init":199,"../services/authService":201,"../services/userService":205,"react":179,"react-redux":46}],196:[function(require,module,exports){
+},{"../lib/actions":200,"../lib/init":201,"../services/authService":203,"../services/userService":207,"react":179,"react-redux":46}],198:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -26061,7 +26281,7 @@ var Nav = function (_Component) {
                 ),
                 React.createElement(
                     'button',
-                    { onClick: changeView.bind(this, 'cats') },
+                    { onClick: changeView.bind(this, 'cat-list') },
                     'Categories'
                 ),
                 React.createElement(
@@ -26084,7 +26304,7 @@ Nav.propTypes = {
 };
 module.exports = connect(mapStateToProps, actions)(Nav);
 
-},{"../lib/actions":198,"react":179,"react-redux":46}],197:[function(require,module,exports){
+},{"../lib/actions":200,"react":179,"react-redux":46}],199:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -26201,7 +26421,7 @@ NewHabbitForm.propTypes = {
 NewHabbitForm.defaultProps = {};
 module.exports = connect(mapStateToProps, actions)(NewHabbitForm);
 
-},{"../lib/actions":198,"../services/habbitService":204,"moment":40,"react":179,"react-redux":46}],198:[function(require,module,exports){
+},{"../lib/actions":200,"../services/habbitService":206,"moment":40,"react":179,"react-redux":46}],200:[function(require,module,exports){
 'use strict';
 
 // view reducer
@@ -26213,6 +26433,14 @@ function changeView(view) {
 // user reducer
 function setUserId(uid) {
     return { type: 'SET_USER_ID', uid: uid };
+}
+
+// cat reducer
+function setCurrentCat(cat) {
+    return { type: 'SET_CURRENT_CAT', cat: cat };
+}
+function setCats(cats) {
+    return { type: 'SET_CATS', cats: cats };
 }
 
 // habbit reducer
@@ -26228,13 +26456,15 @@ function updateSingleHabbit(habbit) {
 
 module.exports = {
     changeView: changeView,
+    setCats: setCats,
+    setCurrentCat: setCurrentCat,
     setCurrentHabbit: setCurrentHabbit,
     setHabbits: setHabbits,
     setUserId: setUserId,
     updateSingleHabbit: updateSingleHabbit
 };
 
-},{}],199:[function(require,module,exports){
+},{}],201:[function(require,module,exports){
 'use strict';
 
 var habbitService = require('../services/habbitService');
@@ -26251,7 +26481,7 @@ module.exports = {
     initServices: initServices
 };
 
-},{"../services/categoryService":202,"../services/habbitService":204,"../services/userService":205}],200:[function(require,module,exports){
+},{"../services/categoryService":204,"../services/habbitService":206,"../services/userService":207}],202:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -26273,7 +26503,7 @@ if (elm) {
     ), elm);
 }
 
-},{"./app.js":190,"./stores/AppStore":206,"react":179,"react-dom":43,"react-redux":46}],201:[function(require,module,exports){
+},{"./app.js":190,"./stores/AppStore":208,"react":179,"react-dom":43,"react-redux":46}],203:[function(require,module,exports){
 'use strict';
 
 var _require = require('./firebaseService');
@@ -26309,7 +26539,7 @@ function getSession(callback) {
 
 module.exports = { facebookLogin: facebookLogin, getSession: getSession };
 
-},{"./firebaseService":203}],202:[function(require,module,exports){
+},{"./firebaseService":205}],204:[function(require,module,exports){
 'use strict';
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -26324,6 +26554,17 @@ function initCats(uid) {
     catRef = db.ref('user-categories/' + uid);
 }
 
+function getCats(callback) {
+    catRef.once('value').then(function (snapshot) {
+        var obj = snapshot.val();
+        var keys = Object.keys(obj);
+        var arr = keys.map(function (key) {
+            return { name: key, index: obj[key] };
+        });
+        callback(arr);
+    });
+}
+
 function createNewCat(catName) {
     catRef.child(catName).once('value').then(function (snapshot) {
         if (!snapshot.exists()) {
@@ -26332,9 +26573,9 @@ function createNewCat(catName) {
     });
 }
 
-module.exports = { initCats: initCats, createNewCat: createNewCat };
+module.exports = { initCats: initCats, createNewCat: createNewCat, getCats: getCats };
 
-},{"./firebaseService":203}],203:[function(require,module,exports){
+},{"./firebaseService":205}],205:[function(require,module,exports){
 'use strict';
 
 var firebase = require("firebase/app");
@@ -26351,7 +26592,7 @@ firebase.initializeApp({
 var db = firebase.database();
 module.exports = { firebase: firebase, db: db };
 
-},{"firebase/app":28,"firebase/auth":29,"firebase/database":30}],204:[function(require,module,exports){
+},{"firebase/app":28,"firebase/auth":29,"firebase/database":30}],206:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26400,7 +26641,7 @@ function updateHabbit(habbit, callback) {
 
 module.exports = { initHabbits: initHabbits, createNewHabbit: createNewHabbit, getHabbits: getHabbits, updateHabbit: updateHabbit };
 
-},{"./categoryService":202,"./firebaseService":203,"object-assign":41}],205:[function(require,module,exports){
+},{"./categoryService":204,"./firebaseService":205,"object-assign":41}],207:[function(require,module,exports){
 'use strict';
 
 var _require = require('./firebaseService');
@@ -26423,7 +26664,7 @@ function setUserInfo(info) {
 
 module.exports = { initUser: initUser, setUserInfo: setUserInfo };
 
-},{"./firebaseService":203}],206:[function(require,module,exports){
+},{"./firebaseService":205}],208:[function(require,module,exports){
 'use strict';
 
 var _require = require('redux');
@@ -26437,11 +26678,13 @@ var thunk = require('redux-thunk').default;
 var userReducer = require('./reducers/UserReducer');
 var viewReducer = require('./reducers/ViewReducer');
 var habbitReducer = require('./reducers/HabbitReducer');
+var categoryReducer = require('./reducers/CategoryReducer');
 
 var AppReducer = combineReducers({
     userData: userReducer,
     viewData: viewReducer,
-    habbitData: habbitReducer
+    habbitData: habbitReducer,
+    catData: categoryReducer
 });
 
 var AppStore = createStore(AppReducer, compose(applyMiddleware(thunk), window && window.devToolsExtension ? window.devToolsExtension() : function (f) {
@@ -26450,7 +26693,36 @@ var AppStore = createStore(AppReducer, compose(applyMiddleware(thunk), window &&
 
 module.exports = AppStore;
 
-},{"./reducers/HabbitReducer":207,"./reducers/UserReducer":208,"./reducers/ViewReducer":209,"redux":186,"redux-thunk":180}],207:[function(require,module,exports){
+},{"./reducers/CategoryReducer":209,"./reducers/HabbitReducer":210,"./reducers/UserReducer":211,"./reducers/ViewReducer":212,"redux":186,"redux-thunk":180}],209:[function(require,module,exports){
+'use strict';
+
+var assign = require('object-assign');
+var initialState = {
+    cats: [],
+    currentCat: {}
+};
+
+function categoryReducer() {
+    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+    switch (action.type) {
+        case 'SET_CATS':
+            return assign({}, state, {
+                cats: action.cats
+            });
+        case 'SET_CURRENT_CAT':
+            return assign({}, state, {
+                currentCat: action.cat
+            });
+        default:
+            return state;
+    }
+}
+
+module.exports = categoryReducer;
+
+},{"object-assign":41}],210:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26485,7 +26757,7 @@ function habbitReducer() {
 
 module.exports = habbitReducer;
 
-},{"object-assign":41}],208:[function(require,module,exports){
+},{"object-assign":41}],211:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26509,7 +26781,7 @@ function userReducer() {
 
 module.exports = userReducer;
 
-},{"object-assign":41}],209:[function(require,module,exports){
+},{"object-assign":41}],212:[function(require,module,exports){
 'use strict';
 
 var assign = require('object-assign');
@@ -26533,4 +26805,4 @@ function viewReducer() {
 
 module.exports = viewReducer;
 
-},{"object-assign":41}]},{},[200]);
+},{"object-assign":41}]},{},[202]);

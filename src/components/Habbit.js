@@ -24,7 +24,9 @@ class Habbit extends Component {
     updateHabbit() {
         const {habbit, setCurrentHabbit} = this.props;
         const newHabbit = assign({}, habbit, {
-            name: this.inputRef.value
+            name: this.nameInputRef.value,
+            category: this.catInputRef.value,
+            description: this.descInputRef.value
         });
         updateHabbit(newHabbit, (err) => {
             if (!err) {
@@ -41,8 +43,8 @@ class Habbit extends Component {
     render() {
         const {habbit, changeView} = this.props;
         const {editMode} = this.state;
-
-        // TODO: add history
+        // TODO: delete habbit
+        // TODO: category auto complete
 
         return (
             <div>
@@ -55,7 +57,9 @@ class Habbit extends Component {
                 </div>
                 {editMode ?
                     <div>
-                        <input ref={(c) => this.inputRef = c} defaultValue={habbit.name}/>
+                        <div><label>Name:</label><input ref={(c) => this.nameInputRef = c} defaultValue={habbit.name}/></div>
+                        <div><label>Description:</label><input ref={(c) => this.descInputRef = c} defaultValue={habbit.description}/></div>
+                        <div><label>Category:</label><input ref={(c) => this.catInputRef = c} defaultValue={habbit.category}/></div>
                         <button onClick={this.updateHabbit}>Save Changes</button>
                     </div> :
                     <div>

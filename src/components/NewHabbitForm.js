@@ -30,6 +30,8 @@ class NewHabbitForm extends Component {
 
     render (){
 
+        // TODO: category auto complete
+
         return (
             <div>
                 <div>
