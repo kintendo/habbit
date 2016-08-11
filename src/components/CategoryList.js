@@ -5,17 +5,27 @@ const {Component, PropTypes} = React;
 const {connect} = require('react-redux');
 const actions = require('../lib/actions');
 const categoryService = require('../services/categoryService');
+const sortable = require('sortablejs');
 
 class CategoryList extends Component {
 
     constructor(props) {
         super(props);
         this.handleViewCat = this.handleViewCat.bind(this);
+        this.saveCatOrder = this.saveCatOrder.bind(this);
     }
 
     componentDidMount() {
         categoryService.getCats( (cats) => {
             this.props.setCats(cats);
+            this.sortableCats = sortable.create(document.getElementById('cats'));
+        });
+    }
+
+    saveCatOrder() {
+        const catArray = this.sortableCats.toArray();
+        categoryService.updateCatOrder(catArray, () => {
+            this.props.changeView('list');
         });
     }
 
@@ -28,19 +38,19 @@ class CategoryList extends Component {
 
         const {cats} = this.props;
 
-        // TODO: make cats sortable
         // TODO: add category
         // TODO: delete category
 
         return (
             <div>
-                <ul>
+                <ul id="cats">
                 {cats.map( (cat) => {
                     return (
-                        <li onClick={this.handleViewCat.bind(this, cat)}>{cat.name}</li>
+                        <li key={cat.name} data-id={cat.name} onClick={this.handleViewCat.bind(this, cat)}>{cat.name}</li>
                     );
                 })}
                 </ul>
+                <button onClick={this.saveCatOrder}>Save Order</button>
             </div>
         );
     }

@@ -1,5 +1,6 @@
 'use strict';
 const {db} = require('./firebaseService');
+const {sortCats} = require('../lib/sort');
 let catRef = undefined;
 
 function initCats(uid) {
@@ -13,16 +14,28 @@ function getCats(callback) {
         const arr = keys.map( (key) => {
             return {name: key, index: obj[key]};
         });
-        callback(arr);
+        callback(sortCats(arr));
     });
 }
 
 function createNewCat(catName) {
-    catRef.child(catName).once('value').then ( (snapshot) => {
+    catRef.child(catName).once('value').then( (snapshot) => {
         if (!snapshot.exists()) {
             catRef.update({[catName]: true});
         }
     });
 }
 
-module.exports = {initCats, createNewCat, getCats};
+function updateCatOrder(cats, callback) {
+    const catObj = {};
+    cats.forEach( (cat, i) => {
+        catObj[cat] = i;
+    });
+    catRef.update(catObj).then( (err) => {
+        if(!err) {
+            callback();
+        }
+    });
+}
+
+module.exports = {initCats, createNewCat, getCats, updateCatOrder};

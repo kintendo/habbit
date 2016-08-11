@@ -15,7 +15,7 @@ class Category extends Component {
 
         const {cat, changeView} = this.props;
 
-        // TODO: make cats sortable
+        // TODO: rename category (create new, destroy old)
 
         return (
             <div>
