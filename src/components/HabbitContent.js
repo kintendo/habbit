@@ -12,18 +12,21 @@ const Category = require('./Category');
 class HabbitContent extends React.Component {
 
     render (){
-
         const {view} = this.props;
+        let content = null;
+        switch (view) {
+            case 'login': content = <Login />; break;
+            case 'list': content = <HabbitList />; break;
+            case 'new': content = <NewHabbitForm />; break;
+            case 'habbit': content = <Habbit />; break;
+            case 'cat-list': content = <CategoryList />; break;
+            case 'cat': content = <Category />; break;
+            // case 'new-cat': content = <NewCatForm />; break;
+        }
 
         return (
             <div>
-                {view === 'login' ? <Login /> : null}
-                {view === 'list' ? <HabbitList /> : null}
-                {view === 'new' ? <NewHabbitForm /> : null}
-                {view === 'habbit' ? <Habbit /> : null}
-                {view === 'cat-list' ? <CategoryList /> : null}
-                {view === 'cat' ? <Category /> : null}
-                {/*{view === 'new-cat' ? <NewCatForm /> : null}*/}
+                {content}
             </div>
         );
     }

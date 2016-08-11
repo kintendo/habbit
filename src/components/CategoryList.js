@@ -38,9 +38,6 @@ class CategoryList extends Component {
 
         const {cats} = this.props;
 
-        // TODO: add category
-        // TODO: delete category
-
         return (
             <div>
                 <ul id="cats">
