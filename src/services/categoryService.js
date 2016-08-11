@@ -19,6 +19,7 @@ function getCats(callback) {
 }
 
 function createNewCat(catName) {
+    if (!catName) return;
     catRef.child(catName).once('value').then( (snapshot) => {
         if (!snapshot.exists()) {
             catRef.update({[catName]: true});

@@ -27218,6 +27218,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27237,16 +27239,22 @@ var connect = _require.connect;
 var HabbitListItem = require('./HabbitListItem');
 var actions = require('../lib/actions');
 var habbitService = require('../services/habbitService');
+var categoryService = require('../services/categoryService');
 var moment = require('moment');
 var assign = require('object-assign');
 
 var HabbitList = function (_Component) {
     _inherits(HabbitList, _Component);
 
-    function HabbitList() {
+    function HabbitList(props) {
         _classCallCheck(this, HabbitList);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(HabbitList).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HabbitList).call(this, props));
+
+        _this.handleViewHabbit = _this.handleViewHabbit.bind(_this);
+        _this.handleCompleteHabbit = _this.handleCompleteHabbit.bind(_this);
+        _this.buildHabbitList = _this.buildHabbitList.bind(_this);
+        return _this;
     }
 
     _createClass(HabbitList, [{
@@ -27256,6 +27264,9 @@ var HabbitList = function (_Component) {
 
             habbitService.getHabbits(function (habbits) {
                 _this2.props.setHabbits(habbits);
+            });
+            categoryService.getCats(function (cats) {
+                _this2.props.setCats(cats);
             });
         }
     }, {
@@ -27280,23 +27291,66 @@ var HabbitList = function (_Component) {
             });
         }
     }, {
-        key: 'render',
-        value: function render() {
+        key: 'buildHabbitList',
+        value: function buildHabbitList() {
             var _this4 = this;
 
-            var habbits = this.props.habbits;
-            // TODO: group by cat
-            // TODO: sort by cat
+            var habbits = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+
+            return habbits.map(function (habbit, i) {
+                return React.createElement(HabbitListItem, _extends({}, habbit, {
+                    key: i,
+                    onViewHabbit: _this4.handleViewHabbit.bind(_this4, habbit),
+                    onCompleteHabbit: _this4.handleCompleteHabbit.bind(_this4, habbit)
+                }));
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this5 = this;
+
+            var _props = this.props;
+            var habbits = _props.habbits;
+            var cats = _props.cats;
+
+            var remainingHabbits = [].concat(_toConsumableArray(habbits));
 
             return React.createElement(
                 'div',
                 null,
-                habbits.map(function (habbit) {
-                    return React.createElement(HabbitListItem, _extends({}, habbit, {
-                        onViewHabbit: _this4.handleViewHabbit.bind(_this4, habbit),
-                        onCompleteHabbit: _this4.handleCompleteHabbit.bind(_this4, habbit)
-                    }));
-                })
+                React.createElement(
+                    'ul',
+                    null,
+                    cats.map(function (cat) {
+                        var filteredHabbits = remainingHabbits.filter(function (habbit) {
+                            return habbit.category === cat.name;
+                        });
+                        remainingHabbits = remainingHabbits.filter(function (habbit) {
+                            return habbit.category !== cat.name;
+                        });
+                        return React.createElement(
+                            'li',
+                            { key: cat.name },
+                            React.createElement(
+                                'span',
+                                null,
+                                cat.name
+                            ),
+                            _this5.buildHabbitList(filteredHabbits)
+                        );
+                    }),
+                    remainingHabbits.length ? React.createElement(
+                        'li',
+                        null,
+                        React.createElement(
+                            'span',
+                            null,
+                            'Uncategorized'
+                        ),
+                        this.buildHabbitList(remainingHabbits)
+                    ) : null
+                )
             );
         }
     }]);
@@ -27305,26 +27359,31 @@ var HabbitList = function (_Component) {
 }(Component);
 
 function mapStateToProps(state) {
+    var catData = state.catData;
     var habbitData = state.habbitData;
 
     return {
+        cats: catData.cats,
         habbits: habbitData.habbits
     };
 }
 
 HabbitList.propTypes = {
+    cats: PropTypes.array,
     habbits: PropTypes.array,
     changeView: PropTypes.func,
+    setCats: PropTypes.func,
     setCurrentHabbit: PropTypes.func,
     setHabbits: PropTypes.func,
     updateSingleHabbit: PropTypes.func
 };
 HabbitList.defaultProps = {
+    cats: [],
     habbits: []
 };
 module.exports = connect(mapStateToProps, actions)(HabbitList);
 
-},{"../lib/actions":201,"../services/habbitService":208,"./HabbitListItem":197,"moment":40,"object-assign":41,"react":179,"react-redux":46}],197:[function(require,module,exports){
+},{"../lib/actions":201,"../services/categoryService":206,"../services/habbitService":208,"./HabbitListItem":197,"moment":40,"object-assign":41,"react":179,"react-redux":46}],197:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -27355,7 +27414,6 @@ var HabbitListItem = function (_Component) {
         value: function render() {
             var _props = this.props;
             var name = _props.name;
-            var category = _props.category;
             var last_completed = _props.last_completed;
             var onCompleteHabbit = _props.onCompleteHabbit;
             var onViewHabbit = _props.onViewHabbit;
@@ -27370,22 +27428,15 @@ var HabbitListItem = function (_Component) {
                     '✅'
                 ),
                 React.createElement(
-                    'div',
+                    'span',
                     { onClick: onViewHabbit },
                     React.createElement(
                         'span',
                         null,
-                        name
+                        ' - ',
+                        name,
+                        ' - '
                     ),
-                    ' ',
-                    React.createElement('br', null),
-                    React.createElement(
-                        'span',
-                        null,
-                        category
-                    ),
-                    ' ',
-                    React.createElement('br', null),
                     React.createElement(
                         'span',
                         null,
@@ -27401,7 +27452,6 @@ var HabbitListItem = function (_Component) {
 }(Component);
 
 HabbitListItem.propTypes = {
-    category: PropTypes.string,
     last_completed: PropTypes.string,
     name: PropTypes.string,
     onCompleteHabbit: PropTypes.func,
@@ -27885,6 +27935,7 @@ function getCats(callback) {
 }
 
 function createNewCat(catName) {
+    if (!catName) return;
     catRef.child(catName).once('value').then(function (snapshot) {
         if (!snapshot.exists()) {
             catRef.update(_defineProperty({}, catName, true));

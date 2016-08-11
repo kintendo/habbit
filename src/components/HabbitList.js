@@ -6,15 +6,26 @@ const {connect} = require('react-redux');
 const HabbitListItem = require('./HabbitListItem');
 const actions = require('../lib/actions');
 const habbitService = require('../services/habbitService');
+const categoryService = require('../services/categoryService');
 const moment = require('moment');
 const assign = require('object-assign');
 
 class HabbitList extends Component {
 
+    constructor(props) {
+        super(props);
+        this.handleViewHabbit = this.handleViewHabbit.bind(this);
+        this.handleCompleteHabbit = this.handleCompleteHabbit.bind(this);
+        this.buildHabbitList = this.buildHabbitList.bind(this);
+    }
+
     componentDidMount() {
         habbitService.getHabbits( (habbits) => {
             this.props.setHabbits(habbits);
         });
+        categoryService.getCats( (cats) => {
+            this.props.setCats(cats);
+        })
     }
 
     handleViewHabbit (habbit) {
@@ -34,43 +45,68 @@ class HabbitList extends Component {
         });
     }
 
+    buildHabbitList (habbits = []) {
+        return habbits.map( (habbit, i) => {
+            return (
+                <HabbitListItem
+                    {...habbit}
+                    key={i}
+                    onViewHabbit={this.handleViewHabbit.bind(this, habbit)}
+                    onCompleteHabbit={this.handleCompleteHabbit.bind(this, habbit)}
+                />
+            );
+        });
+    }
+
     render(){
 
-        const {habbits} = this.props;
-        // TODO: group by cat
-        // TODO: sort by cat
+        const {habbits, cats} = this.props;
+        let remainingHabbits = [...habbits];
 
         return (
             <div>
-                {habbits.map( (habbit) => {
+                <ul>
+                {cats.map( (cat) => {
+                    const filteredHabbits = remainingHabbits.filter( (habbit) => habbit.category === cat.name );
+                    remainingHabbits = remainingHabbits.filter( (habbit) => habbit.category !== cat.name );
                     return (
-                        <HabbitListItem
-                            {...habbit}
-                            onViewHabbit={this.handleViewHabbit.bind(this, habbit)}
-                            onCompleteHabbit={this.handleCompleteHabbit.bind(this, habbit)}
-                        />
+                        <li key={cat.name}>
+                            <span>{cat.name}</span>
+                            {this.buildHabbitList(filteredHabbits)}
+                        </li>
                     );
                 })}
+                {remainingHabbits.length ?
+                    <li>
+                        <span>Uncategorized</span>
+                        {this.buildHabbitList(remainingHabbits)}
+                    </li>
+                : null }
+                </ul>
             </div>
         );
     }
 }
 
 function mapStateToProps(state) {
-    const {habbitData} = state;
+    const {catData, habbitData} = state;
     return {
+        cats: catData.cats,
         habbits: habbitData.habbits
     };
 }
 
 HabbitList.propTypes = {
+    cats: PropTypes.array,
     habbits: PropTypes.array,
     changeView: PropTypes.func,
+    setCats: PropTypes.func,
     setCurrentHabbit: PropTypes.func,
     setHabbits: PropTypes.func,
     updateSingleHabbit: PropTypes.func
 };
 HabbitList.defaultProps = {
+    cats: [],
     habbits: []
 };
 module.exports = connect(mapStateToProps, actions)(HabbitList);

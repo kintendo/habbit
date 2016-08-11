@@ -7,23 +7,21 @@ const moment = require('moment');
 class HabbitListItem extends Component {
 
     render (){
-        const {name, category, last_completed, onCompleteHabbit, onViewHabbit} = this.props;
+        const {name, last_completed, onCompleteHabbit, onViewHabbit} = this.props;
 
         return (
             <div>
                 <span onClick={onCompleteHabbit}>✅</span>
-                <div onClick={onViewHabbit}>
-                    <span>{name}</span> <br />
-                    <span>{category}</span> <br />
+                <span onClick={onViewHabbit}>
+                    <span> - {name} - </span>
                     <span>Last Completed: {moment(last_completed).fromNow()}</span>
-                </div>
+                </span>
             </div>
         );
     }
 }
 
 HabbitListItem.propTypes = {
-    category: PropTypes.string,
     last_completed: PropTypes.string,
     name: PropTypes.string,
     onCompleteHabbit: PropTypes.func,
