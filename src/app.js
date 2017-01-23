@@ -33,7 +33,8 @@ class App extends Component {
         const {view, uid} = this.props;
 
         return (
-            <div>
+            <div className='main'>
+                <h1>Habbit</h1>
                 {uid ? <Nav /> : null}
                 <HabbitContent view={view} />
             </div>

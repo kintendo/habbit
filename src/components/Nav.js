@@ -11,7 +11,7 @@ class Nav extends Component {
         const {changeView} = this.props;
 
         return (
-            <div>
+            <div className='nav'>
                 <button onClick={changeView.bind(this, 'list')}>Habbits</button>
                 <button onClick={changeView.bind(this, 'cat-list')}>Categories</button>
                 <button onClick={changeView.bind(this, 'new')}>New Habbit</button>
