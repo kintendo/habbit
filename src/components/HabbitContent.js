@@ -7,7 +7,6 @@ const Login = require('./Login');
 const Habbit = require('./Habbit');
 const CategoryList = require('./CategoryList');
 const Category = require('./Category');
-// const NewCatForm = require('./NewCatForm');
 
 class HabbitContent extends React.Component {
 
@@ -21,7 +20,6 @@ class HabbitContent extends React.Component {
             case 'habbit': content = <Habbit />; break;
             case 'cat-list': content = <CategoryList />; break;
             case 'cat': content = <Category />; break;
-            // case 'new-cat': content = <NewCatForm />; break;
         }
 
         return (

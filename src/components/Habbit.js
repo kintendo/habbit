@@ -7,6 +7,7 @@ const assign = require('object-assign');
 const actions = require('../lib/actions');
 const moment = require('moment');
 const {updateHabbit} = require('../services/habbitService');
+const Autocomplete = require('react-autocomplete');
 
 class Habbit extends Component {
 
@@ -14,7 +15,8 @@ class Habbit extends Component {
         super(props);
 
         this.state = {
-            editMode: false
+            editMode: false,
+            catInput: props.habbit.category
         };
 
         this.toggleEditMode = this.toggleEditMode.bind(this);
@@ -25,7 +27,7 @@ class Habbit extends Component {
         const {habbit, setCurrentHabbit} = this.props;
         const newHabbit = assign({}, habbit, {
             name: this.nameInputRef.value,
-            category: this.catInputRef.value,
+            category: this.state.catInput,
             description: this.descInputRef.value
         });
         updateHabbit(newHabbit, (err) => {
@@ -41,10 +43,10 @@ class Habbit extends Component {
     }
 
     render() {
-        const {habbit, changeView} = this.props;
-        const {editMode} = this.state;
-        // TODO: delete habbit
-        // TODO: category auto complete
+        const {habbit, changeView, cats} = this.props;
+        const {editMode, catInput} = this.state;
+
+        const _cats = cats.filter( ({name}) => name.indexOf(catInput) !== -1 );
 
         return (
             <div>
@@ -57,9 +59,20 @@ class Habbit extends Component {
                 </div>
                 {editMode ?
                     <div>
-                        <div><label>Name:</label><input ref={(c) => this.nameInputRef = c} defaultValue={habbit.name}/></div>
-                        <div><label>Description:</label><input ref={(c) => this.descInputRef = c} defaultValue={habbit.description}/></div>
-                        <div><label>Category:</label><input ref={(c) => this.catInputRef = c} defaultValue={habbit.category}/></div>
+                        <div><label>Name: </label><input ref={(c) => this.nameInputRef = c} defaultValue={habbit.name}/></div>
+                        <div><label>Description: </label><input ref={(c) => this.descInputRef = c} defaultValue={habbit.description}/></div>
+                        <div><label>Category: </label>
+                            <Autocomplete
+                                value={catInput}
+                                items={_cats}
+                                getItemValue={(item) => item.name}
+                                onChange={(event, value) => this.setState({ catInput: value })}
+                                onSelect={value => this.setState({ catInput: value })}
+                                renderItem={ (item, isHighlighted) => (
+                                    <div key={item.abbr}>{item.name}</div>
+                                )}
+                            />
+                        </div>
                         <button onClick={this.updateHabbit}>Save Changes</button>
                     </div> :
                     <div>
@@ -79,12 +92,14 @@ class Habbit extends Component {
 }
 
 function mapStateToProps(state) {
-    const {habbitData} = state;
+    const {habbitData, catData} = state;
     return {
-        habbit: habbitData.currentHabbit
+        habbit: habbitData.currentHabbit,
+        cats: catData.cats
     };
 }
 Habbit.propTypes = {
+    cats: PropTypes.array,
     habbit: PropTypes.object,
     changeView: PropTypes.func,
     setCurrentHabbit: PropTypes.func
