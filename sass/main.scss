@@ -25,3 +25,21 @@ body {
   @include flexbox;
   @include justify-content(center);
 }
+
+.cat-header {
+  font-size: 28px;
+  font-weight: bold;
+  border-bottom: 2px solid $white;
+}
+
+.habbit-list {
+  list-style-type: none;
+}
+
+.habbit {
+  border: 1px solid $white;
+  background: $white;
+  color: $gray;
+  padding: 10px;
+  margin: 5px 0px;
+}

@@ -7,7 +7,7 @@ const actions = require('../lib/actions');
 
 class Nav extends Component {
 
-    render() {
+    render() { 
         const {changeView} = this.props;
 
         return (

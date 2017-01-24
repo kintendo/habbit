@@ -10,7 +10,7 @@ class HabbitListItem extends Component {
         const {name, last_completed, onCompleteHabbit, onViewHabbit} = this.props;
 
         return (
-            <div>
+            <div className='habbit'>
                 <span onClick={onCompleteHabbit}>✅</span>
                 <span onClick={onViewHabbit}>
                     <span> - {name} - </span>

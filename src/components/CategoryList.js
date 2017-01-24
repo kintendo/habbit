@@ -40,7 +40,7 @@ class CategoryList extends Component {
 
         return (
             <div>
-                <ul id="cats">
+                <ul id='cats' className=''>
                 {cats.map( (cat) => {
                     return (
                         <li key={cat.name} data-id={cat.name} onClick={this.handleViewCat.bind(this, cat)}>{cat.name}</li>

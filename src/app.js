@@ -20,7 +20,7 @@ class App extends Component {
         initServices(uid);
     }
 
-    componentDidMount() {
+    componentDidMount() { 
         getSession( ({uid}) => {
             if (uid) {
                 this.initializeUser(uid);

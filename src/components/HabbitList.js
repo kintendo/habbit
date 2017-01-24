@@ -65,20 +65,20 @@ class HabbitList extends Component {
 
         return (
             <div>
-                <ul>
+                <ul className='habbit-list'>
                 {cats.map( (cat) => {
                     const filteredHabbits = remainingHabbits.filter( (habbit) => habbit.category === cat.name );
                     remainingHabbits = remainingHabbits.filter( (habbit) => habbit.category !== cat.name );
                     return (
                         <li key={cat.name}>
-                            <span>{cat.name}</span>
+                            <p className='cat-header'>{cat.name}</p>
                             {this.buildHabbitList(filteredHabbits)}
                         </li>
                     );
                 })}
                 {remainingHabbits.length ?
                     <li>
-                        <span>Uncategorized</span>
+                        <p className='cat-header'>Uncategorized</p>
                         {this.buildHabbitList(remainingHabbits)}
                     </li>
                 : null }
